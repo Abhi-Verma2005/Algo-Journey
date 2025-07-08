@@ -321,7 +321,7 @@ const closeApiKeyModal = () => {
 ) : (
   messages
   .filter((f) => (f.sender !== "system"))
-  .map((message, idx) => (
+  .map((message) => (
     <div 
       key={message.id} 
       className={`flex mb-6 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}

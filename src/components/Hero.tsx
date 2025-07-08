@@ -13,6 +13,7 @@ import arena from '@/images/arena.png'
 import projectEval from '@/images/projectEval.png'
 import useDemo from "@/store/demoCreds"
 import { CardContainer } from "./ui/3d-card"
+import DSAHeroBackground from "./DSAbackground"
 
 const ModernLandingPage = () => {
   const { scrollYProgress } = useScroll()
@@ -83,56 +84,13 @@ const ModernLandingPage = () => {
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-4 py-20">
-        {/* Background */}
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50" />
-          
-          {/* Animated Background Elements */}
-          <div className="absolute inset-0">
-            <motion.div
-              className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-200/40 rounded-full filter blur-3xl"
-              animate={{
-                x: [0, 50, 0],
-                y: [0, -30, 0],
-                scale: [1, 1.2, 1],
-              }}
-              transition={{
-                duration: 8,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-            <motion.div
-              className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-indigo-200/40 rounded-full filter blur-3xl"
-              animate={{
-                x: [0, -40, 0],
-                y: [0, 40, 0],
-                scale: [1, 0.8, 1],
-              }}
-              transition={{
-                duration: 10,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-          </div>
-
-          {/* Grid Pattern */}
-          <div className="absolute inset-0 opacity-[0.02]">
-            <div
-              className="w-full h-full"
-              style={{
-                backgroundImage: `
-                  linear-gradient(rgba(59, 130, 246, 0.8) 1px, transparent 1px),
-                  linear-gradient(90deg, rgba(59, 130, 246, 0.8) 1px, transparent 1px)
-                `,
-                backgroundSize: '60px 60px'
-              }}
-            />
-          </div>
+        {/* Background - Lower z-index */}
+        <div className="absolute inset-0 z-0">
+          <DSAHeroBackground />
         </div>
 
-        <div className="max-w-7xl mx-auto text-center">
+        {/* Content - Higher z-index */}
+        <div className="relative z-20 max-w-7xl mx-auto text-center">
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -153,7 +111,7 @@ const ModernLandingPage = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mb-6"
           >
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight">
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight relative z-30">
               <span className="block mb-2">
                 <span className="text-slate-900">Algo</span>
                 <span className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 bg-clip-text text-transparent">Journey</span>
@@ -166,7 +124,7 @@ const ModernLandingPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-xl md:text-2xl text-slate-600 max-w-4xl mx-auto mb-12 leading-relaxed"
+            className="text-xl md:text-2xl text-slate-600 max-w-4xl mx-auto mb-12 leading-relaxed relative z-30"
           >
             Master algorithms and data structures through interactive learning. 
             <span className="text-blue-600 font-semibold"> Join 10,000+ developers</span> who have accelerated their careers.
@@ -177,7 +135,7 @@ const ModernLandingPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 relative z-30"
           >
             {!session && (
               <Button 
@@ -208,7 +166,7 @@ const ModernLandingPage = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto"
+            className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto relative z-30"
           >
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
@@ -221,7 +179,7 @@ const ModernLandingPage = () => {
 
         {/* Scroll Indicator */}
         <motion.div
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 1.2 }}
@@ -508,12 +466,12 @@ const ModernLandingPage = () => {
           {/* Contributors Section */}
           <div className="border-t border-slate-800 pt-12 mb-8">
             <h4 className="text-xl font-semibold mb-8 text-center">Built by passionate developers</h4>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[
                 {
                   name: "Abhishek Verma",
                   role: "Full Stack Developer",
-                  github: "https://github.com/GIT-Marquestra",
+                  github: "https://github.com/Abhi-Verma2005",
                   linkedin: "https://www.linkedin.com/in/abhishek-verma-6803b1309/",
                 },
                 {
@@ -521,12 +479,6 @@ const ModernLandingPage = () => {
                   role: "Full Stack Developer", 
                   github: "https://github.com/anish877",
                   linkedin: "https://www.linkedin.com/in/aniiiiiiiii/",
-                },
-                {
-                  name: "Taj",
-                  role: "Frontend Developer",
-                  github: "https://github.com/Taj-786",
-                  linkedin: "https://www.linkedin.com/in/tajuddinshaik786/",
                 }
               ].map((contributor, index) => (
                 <div key={index} className="bg-slate-800 p-6 rounded-2xl">

@@ -24,7 +24,8 @@ import {
   ShieldCheck,
   ChartNoAxesColumnIcon,
   UserCog, 
-  LucideSword
+  LucideSword,
+  Brain
 } from 'lucide-react';
 import useTagStore from '@/store/tagsStore';
 import useStore from '@/store/store';
@@ -48,6 +49,12 @@ const Navbar = () => {
           axios.post('/api/checkIfAdmin'),
           axios.post('/api/getUsername')
         ]);
+        //  const usernames = await axios.get<{
+        //     leetcodeUsername: string;
+        //     codeforcesUsername: string;  
+        //   }>('/api/user/username');
+
+        // setPUsernames(usernames.data)
         
         setUsername(usernameResponse.data.username);
         setIsAdmin(adminResponse.data.isAdmin);
@@ -90,6 +97,11 @@ const Navbar = () => {
       console.error('Error during sign out:', error);
     }
   };
+
+  if(status === "unauthenticated"){
+    return <div/>
+
+  }
 
   return (
   <nav className={`fixed top-0 left-0 w-full h-16 z-50 flex items-center justify-between px-4 md:px-8 border-b shadow-sm transition-colors duration-300 ${
@@ -209,7 +221,17 @@ const Navbar = () => {
                  
                   <DropdownMenuSeparator className={isDarkMode ? 'bg-gray-700' : 'bg-gray-100'} />
                 </>
+                
               )}
+
+                 <Link href={'/chat/false'}>
+                    <DropdownMenuItem className={`px-3 py-2 cursor-pointer ${
+                      isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
+                    }`}>
+                      <Brain className="mr-2 h-4 w-4 text-amber-500" />
+                      <span className={isDarkMode ? 'text-gray-200' : 'text-gray-700'}>Chat/Rate with Gemini</span>
+                    </DropdownMenuItem>
+                  </Link>
                
                   <Link href='/about'>
                     <DropdownMenuItem className={`px-3 py-2 cursor-pointer ${

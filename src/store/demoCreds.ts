@@ -11,7 +11,7 @@ interface demoAcc {
 const useDemo = create<demoAcc>((set) => ({
     creds: {
         username: '',
-        password: ""
+        password: ''
     },
     setCreds: (value) => set({ creds: value })
 }))

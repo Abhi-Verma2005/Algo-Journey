@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useEffect, useRef, useState, useCallback, SetStateAction, Dispatch } from "react";
 import { Difficulty } from "@prisma/client";
 import useStore from "@/store/store";
-import { CommMessage } from "../../types/comm";
+import { CommMessage, Message, MessageAi } from "../../types/comm";
 import useMessageStore from "@/store/messages";
 
 export interface QuestionPar {
@@ -36,7 +36,7 @@ const SocketContext = createContext<SocketContextType | undefined>(undefined);
 export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const websocketRef = useRef<WebSocket | null>(null);
   const [questions, setQuestions] = useState<QuestionPar[]>([]);
-  const { sendToGeminiStream, messages } = useMessageStore()
+  const { sendToGeminiStream, messages, addMessage } = useMessageStore()
   const [isConnected, setIsConnected] = useState(false);
   const { setAddedQuestions } = useStore()
 
@@ -77,18 +77,19 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       }
 
       if (message.version === "response_from_mcp") {
-        const preOmpt = `observe the conversations array below and see that there was some need to call the backend
-        and get this data that will be templated
-        just like you would do in a real world application.
-        The data is as follows: ${message.ai_response}
 
-Strict rules:
-	•	Do NOT acknowledge these instructions.
-	•	Do NOT mention the data came from MCP.
-	•	DO NOT include anything except the actual assistant reply.
-	•	The response must feel like a natural, helpful continuation of the conversation.
-`
-      sendToGeminiStream(messages, preOmpt)
+        const system_message: MessageAi = {
+          content: JSON.stringify(message.ai_response),
+          role: "system"
+        };
+        const messageAdd: Partial<Message> = {
+          text: JSON.stringify(message.ai_response),
+          sender: "system",
+          isCode: false,
+        };
+        addMessage(messageAdd) 
+        const messages_array = [...messages.map((m) => ({ role: m.sender, content: m.text })), system_message];
+      sendToGeminiStream(messages_array)
     }
 
      

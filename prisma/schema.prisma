@@ -117,7 +117,6 @@ model GroupOnContest {
   rank              Int?                
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
-
   @@unique([groupId, contestId])
   @@index([contestId, score]) 
 }
@@ -142,7 +141,7 @@ model Question {
   tagHints          TagHint[]                       
   hint              Hint?      
   teachingMeta      Json?
-
+  
   @@index([inArena, arenaAddedAt])
   @@map("questions")
 }
@@ -316,9 +315,23 @@ enum ApplicationStatus {
 }
 
 model UserConfig {
-  id       String   @id @default(uuid())
-  userId   String   @unique
-  user     User     @relation(fields: [userId], references: [id])
-  config   Json     // E.g. { "explainStyle": "NLP", "strictMode": true }
-  updatedAt DateTime @updatedAt
+  id                          Int      @id @default(autoincrement())
+  userEmail                   String   @unique 
+  leetcode_questions_solved   Int
+  codeforces_questions_solved Int
+  rank                        Rank     @default(novice_1)
+  user_brief                  String   @default("Just started focusing on DSA to build problem-solving skills for placements. Motivated to improve, needs structured guidance and consistent practice to grow from basics to intermediate level.")
+  createdAt                   DateTime @default(now())
+  updatedAt                   DateTime @updatedAt
+  user                        User     @relation(fields: [userEmail], references: [email])
+}
+
+enum Rank {
+  novice_1
+  novice_2
+  learner_1
+  learner_2
+  competent_1
+  advanced
+  expert
 }

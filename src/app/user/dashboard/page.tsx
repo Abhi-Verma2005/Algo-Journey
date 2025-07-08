@@ -154,6 +154,7 @@ export default function Dashboard() {
   const [loadingContest, setLoadingContest] = useState(false)
   const [loadingMembers, setLoadingMembers] = useState<boolean>(false); 
   const router = useRouter();
+  const { setPUsernames } = useStore()
   const { data: session, status } = useSession();
   const [showTeamMembers, setShowTeamMembers] = useState(false);
   const fetchDashboardData = async (): Promise<DashboardData> => {
@@ -210,24 +211,23 @@ export default function Dashboard() {
   const fetchPlatformData = async (): Promise<PlatformData> => {
     try{
       setLoadingPlatformData(true)
-    const usernames = await axios.post<{
-      leetcodeUsername: string | null;
-      codeforcesUsername: string | null;  
-    }>('/api/user/username');
-  
+
+      const usernameRes = await axios.get<{ leetcodeUsername: string; codeforcesUsername: string }>("/api/user/username");
+      setPUsernames({ leetcodeUsername: usernameRes.data.leetcodeUsername, codeforcesUsername: usernameRes.data.codeforcesUsername })
+      
     
   
-    if (!usernames.data.leetcodeUsername || !usernames.data.codeforcesUsername) {
+    if (!usernameRes.data.leetcodeUsername || !usernameRes.data.codeforcesUsername) {
       throw new Error('Usernames not set');
     }
   
     const [leetData, codeforcesData] = await Promise.all([
-      fetchUserStats(usernames.data.leetcodeUsername),
-      fetchCodeforcesUserData(usernames.data.codeforcesUsername),
+      fetchUserStats(usernameRes.data.leetcodeUsername),
+      fetchCodeforcesUserData(usernameRes.data.codeforcesUsername),
     ]);
 
 
-    const responseTotal = await fetchLatestSubmissionsLeetCode(usernames.data.leetcodeUsername)
+    const responseTotal = await fetchLatestSubmissionsLeetCode(usernameRes.data.leetcodeUsername)
 
 
     const leetcodeData = {

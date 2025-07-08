@@ -19,7 +19,7 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-
+      
     const user = await prisma.user.findUnique({
       where: { email: userEmail },
       select: { id: true }

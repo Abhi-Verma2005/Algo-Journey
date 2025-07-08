@@ -3,29 +3,39 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Check, Clipboard, User, Send, X, Brain, Settings } from 'lucide-react';
 import useMessageStore from '@/store/messages';
 import toast from 'react-hot-toast';
-// import { v4 as uuidv4 } from 'uuid'; 
 import useStore from '@/store/store';
 import { useSession } from 'next-auth/react';
 import { useSocket } from '@/hooks/SocketContext';
 import { AiResponse, CommMessage } from '../../types/comm';
+import axios from 'axios';
+import { fetchUserStats } from '@/serverActions/fetch';
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeHighlight from "rehype-highlight";
+import "highlight.js/styles/github-dark-dimmed.css";
+
+
+
+
 
 const ChatComponent: React.FC = () => {
   const { 
     messages, 
     isLoading,
     sendMessage, 
+    userApiKey
   } = useMessageStore();
   const { status } = useSession();
   const { data:session } = useSession()
   const { websocket } = useSocket()
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const { setUserApikey } = useMessageStore()
+  const { setUserApikey, setUserConfig, userConfig, addMessage } = useMessageStore()
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [showPrompts, setShowPrompts] = useState(false);
   const [showToneChanger, setShowToneChanger] = useState(false);
-  const { isDarkMode } = useStore()
+  const { isDarkMode, setPUsernames } = useStore()
   const [currentTone, setCurrentTone] = useState("juggernaut");
   const DEFAULT_HEIGHT = "40px";
   const MAX_HEIGHT = 150;
@@ -42,6 +52,66 @@ const ChatComponent: React.FC = () => {
     { id: "creative", name: "Creative", description: "Imaginative and innovative perspectives" },
     { id: "technical", name: "Technical", description: "In-depth, specialized analysis" }
   ];
+
+  useEffect(() => {
+
+    const getUserConfig = async () => {
+      try {
+        const response = await axios.get(`/api/user/user-config`);
+        // config not found hence will create one 
+        const usernameRes = await axios.get<{ leetcodeUsername: string; codeforcesUsername: string }>("/api/user/username");
+        setPUsernames({ leetcodeUsername: usernameRes.data.leetcodeUsername, codeforcesUsername: usernameRes.data.codeforcesUsername })
+        const leetcodeResponse = await fetchUserStats(usernameRes.data.leetcodeUsername)
+        // have to add codeforces condition too
+          if (response.data.leetcode_questions_solved !== leetcodeResponse?.totalSolved){
+            try{
+              const userConfigUpdateResponse = await axios.patch("/api/user/user-config", { 
+              leetcode_questions_solved: leetcodeResponse?.totalSolved,
+              codeforces_questions_solved: 0 
+            })
+            if(userConfigUpdateResponse.status === 200){
+              setUserConfig(userConfigUpdateResponse.data)
+              toast.success("User Data Updated")
+            }
+            } catch(error) {
+              console.error("Error occured while updating user-config: ", error)
+            }
+
+          } 
+          if(response.data.message === "Config not found") {
+            try{
+              const userConfigCreateResponse = await axios.post("/api/user/user-config", { 
+              leetcode_questions_solved: leetcodeResponse?.totalSolved,
+              codeforces_questions_solved: 0 
+            })
+            if(userConfigCreateResponse.status === 200){
+              toast.success("User Data Updated")
+            }
+
+            } catch(error) {
+              console.error("Error occured while creating user-config: ", error)
+            }
+          
+            // not adding message in everycondition fix that
+
+            setUserConfig(response.data)
+                
+          }
+
+          else{
+
+            setUserConfig(response.data)
+          }
+        return response.data;
+    } catch (error: any) {
+      console.error('Failed to fetch user config:', error);
+      return null;
+    }
+    }
+
+    getUserConfig()
+ 
+  }, [])
   
   useEffect(() => {
     scrollToBottom();
@@ -119,26 +189,7 @@ const ChatComponent: React.FC = () => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       if(!textAreaRef?.current?.value) return 
-    //   const messageVectorToSend = [...messages]
-    //   if(!textAreaRef.current?.value) return 
-    //   const message0: Message = {
-    //   id: uuidv4(),
-    //   text: textAreaRef.current.value || '',
-    //   sender: 'user',
-    //   timestamp: new Date(),
-    //   isCode: false
-    // };
-    //   addMessage(message0)
-    //   messageVectorToSend.push(message0)
-    //   const message: CommMessage = {
-    //     messages: messageVectorToSend,
-    //     version: "message",
-    //     user_email: session?.user.email || "",
-    //     sender: "user",
-    //     user_apikey: userApiKey
-    //   } 
-    //   const toSend = JSON.stringify(message)
-    //   websocket?.send(toSend);
+      
     sendMessage(textAreaRef.current?.value, () => {
         if(textAreaRef?.current?.value){
           textAreaRef.current.value = ""
@@ -148,9 +199,11 @@ const ChatComponent: React.FC = () => {
     const messageToSend: CommMessage = {
         version: message.function_to_call!,
         sender: "system",
+        ai_response: message.next_call_prompt,
         user_email: session?.user.email || "",
-        ai_response: message.response
+        user_apikey: userApiKey
     }
+
 
     if (websocket && websocket.readyState === WebSocket.OPEN) {
     websocket.send(JSON.stringify(messageToSend));
@@ -259,94 +312,114 @@ const closeApiKeyModal = () => {
   <div className={`${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} transition-colors duration-300`}>
     <div className="flex flex-col pb-40 w-full h-[100vh] max-w-[70%] mx-auto relative">
     <div className={`flex-1 p-4 pt-24 overflow-y-auto relative ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
-      {/* Tone indicator */}
-      <div className="sticky top-0 flex justify-center mb-4 z-10">
-        <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-          isDarkMode 
-            ? 'bg-blue-900/50 text-blue-300' 
-            : 'bg-blue-50 text-blue-700'
-        }`}>
-          <span>Tone: {getToneIndicator()}</span>
-        </div>
-      </div>
-      
-      {messages.length === 0 ? (
-        <div className={`flex flex-col items-center justify-center h-full ${isDarkMode ? 'text-blue-400' : 'text-blue-500'}`}>
-          <p className="text-center">Chat with Juggernaut</p>
-        </div>
-      ) : (
-        messages.map((message) => (
-          <div 
-            key={message.id} 
-            className={`flex mb-4 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
-            <div 
-              className={`relative max-w-3/4 rounded-lg p-3 ${
-                message.sender === 'user' 
-                  ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-br-none' 
-                  : isDarkMode
-                    ? 'bg-gray-800 text-gray-100 border border-gray-700 rounded-bl-none shadow-lg'
-                    : 'bg-white text-slate-800 border border-blue-100 rounded-bl-none shadow-md'
-              }`}
-              style={{ width: message.sender === 'ai' ? '75%' : 'auto' }}
-            >
-              <div className="flex flex-col w-full">
-                <div className="flex items-center mb-1">
-                  {message.sender === 'ai' ? (
-                    <Brain className={`size-4 ${isDarkMode ? 'text-blue-400' : ''}`}/>
-                  ) : (
-                    <User size={16} className="mr-1 text-white" />
-                  )}
-                  <span className="text-xs opacity-70 mx-1">
-                    {message.sender === 'ai' ? 'Jugg' : 'You'} • {formatTime(message.timestamp)}
-                  </span>
-                </div>
-                
-                <div className="w-full p-3">
-                  <div className="whitespace-pre-wrap">{message.text}</div>
-                </div>
+    
 
-                <button 
-                  className={`absolute bottom-2 right-2 p-1 rounded-md transition-all ${
-                    message.sender === 'user'
-                      ? 'text-white hover:text-blue-200'
-                      : isDarkMode
-                        ? 'text-blue-400 hover:text-blue-300'
-                        : 'text-blue-400 hover:text-blue-600'
-                  }`}
-                  onClick={() => copyToClipboard(message.text, message.id)}
+{messages.length === 0 ? (
+  <div className={`flex flex-col items-center justify-center h-full ${isDarkMode ? 'text-blue-400' : 'text-blue-500'}`}>
+    <p className="text-center">Chat with Juggernaut</p>
+  </div>
+) : (
+  messages
+  .filter((f) => (f.sender !== "system"))
+  .map((message, idx) => (
+    <div 
+      key={message.id} 
+      className={`flex mb-6 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+    >
+      {message.sender === 'user' ? (
+        // User message with bubble
+        <div className="relative max-w-3/4 bg-gradient-to-r from-blue-800 to-blue-800 text-white rounded-lg rounded-br-none p-3">
+          <div className="flex flex-col w-full">
+            <div className="flex items-center mb-1">
+              <User size={16} className="mr-1 text-white" />
+              <span className="text-xs opacity-70 mx-1">
+                You • {formatTime(message.timestamp)}
+              </span>
+            </div>
+            
+            <div className="w-full p-3">
+              <div className="prose max-w-none rounded-xl prose-p:leading-loose prose-p:mb-3">
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeHighlight]}
                 >
-                  {copiedMessageId === message.id ? (
-                    <Check size={16} className="text-green-500" />
-                  ) : (
-                    <Clipboard size={16}/>
-                  )}
-                </button>
+                  {message.text}
+                </ReactMarkdown>
               </div>
             </div>
+
+            <button 
+              className="absolute bottom-2 right-2 p-1 rounded-md transition-all text-white hover:text-blue-200"
+              onClick={() => copyToClipboard(message.text, message.id)}
+            >
+              {copiedMessageId === message.id ? (
+                <Check size={16} className="text-green-500" />
+              ) : (
+                <Clipboard size={16}/>
+              )}
+            </button>
           </div>
-        ))
-      )}
-      
-      {isLoading && (
-        <div className="flex mb-4 justify-start">
-          <div className={`flex max-w-[75%] rounded-lg p-4 rounded-bl-none shadow-md ${
-            isDarkMode 
-              ? 'bg-gray-800 text-gray-100 border border-gray-700' 
-              : 'bg-white text-slate-800 border border-blue-100'
+        </div>
+      ) : (
+        // AI message without bubble - directly on ground
+        <div className="w-full max-w-[85%]">
+          <div className={`flex items-center mb-2 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+            <Brain className="size-4 mr-2"/>
+            <span className="text-sm font-medium">Jugg</span>
+            <span className={`text-xs opacity-70 ml-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+              {formatTime(message.timestamp)}
+            </span>
+          </div>
+          
+          <div className={`relative prose prose-md max-w-none ${
+            isDarkMode ? 'prose-invert text-gray-100' : 'prose-gray text-gray-800'
           }`}>
-            <div className="flex items-center space-x-2">
-              <Brain className={isDarkMode ? 'text-blue-400' : ''}/>
-              <p className={`text-xl font-semibold text-transparent bg-clip-text bg-[linear-gradient(to_right,#2563eb_0%,#60a5fa_50%,#2563eb_100%)] bg-[length:200%_100%] animate-[shimmer_1.5s_infinite_linear] ${
-                isDarkMode ? 'bg-[linear-gradient(to_right,#60a5fa_0%,#93c5fd_50%,#60a5fa_100%)]' : ''
-              }`}>
-                Jugg is Thinking
-              </p>
-            </div>
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeHighlight]}
+            >
+              {message.text}
+            </ReactMarkdown>
+            
+            <button 
+              className={`absolute top-2 right-2 p-1.5 rounded-md transition-all opacity-0 group-hover:opacity-100 ${
+                isDarkMode
+                  ? 'text-gray-400 hover:text-gray-300 hover:bg-gray-800'
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+              }`}
+              onClick={() => copyToClipboard(message.text, message.id)}
+            >
+              {copiedMessageId === message.id ? (
+                <Check size={16} className="text-green-500" />
+              ) : (
+                <Clipboard size={16}/>
+              )}
+            </button>
           </div>
         </div>
       )}
+    </div>
+  ))
+)}
+
+{isLoading && (
+  <div className="flex mb-6 justify-start">
+    <div className="w-full max-w-[85%]">
+      <div className={`flex items-center mb-2 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+        <Brain className="size-4 mr-2"/>
+        <span className="text-sm font-medium">Jugg</span>
+      </div>
       
+      <div className="flex items-center space-x-2">
+        <p className={`text-xl font-semibold text-transparent bg-clip-text bg-[linear-gradient(to_right,#2563eb_0%,#60a5fa_50%,#2563eb_100%)] bg-[length:200%_100%] animate-[shimmer_1.5s_infinite_linear] ${
+          isDarkMode ? 'bg-[linear-gradient(to_right,#60a5fa_0%,#93c5fd_50%,#60a5fa_100%)]' : ''
+        }`}>
+          Thinking...
+        </p>
+      </div> 
+    </div>
+  </div>
+)}
       <div ref={messagesEndRef} />
     </div>
     
@@ -365,7 +438,9 @@ const closeApiKeyModal = () => {
         ${isHovered ? 'opacity-100' : 'opacity-75'}`}
       />
 
-      <div className={`relative w-full h-full rounded-xl p-3 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+      <div onClick={() => {
+        textAreaRef.current?.focus()
+      }} className={`relative w-full h-full rounded-xl cursor-text p-3 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
         {/* Quick Prompts Panel */}
         {showPrompts && (
           <div className={`absolute bottom-full left-0 right-0 mb-2 rounded-lg shadow-lg p-2 z-10 ${
@@ -465,8 +540,7 @@ const closeApiKeyModal = () => {
             const messageToSend: CommMessage = {
                 version: message.function_to_call!,
                 sender: "system",
-                user_email: session?.user.email || "",
-                ai_response: message.response
+                user_email: session?.user.email || ""
             }
 
             if (websocket && websocket.readyState === WebSocket.OPEN) {

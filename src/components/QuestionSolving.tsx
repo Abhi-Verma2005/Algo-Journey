@@ -579,7 +579,7 @@ const QuestionSolving = () => {
                         }
                         const response = await verifySubmission(q.leetcodeUrl ? 'Leetcode' : 'Codeforces', q.slug, q.leetcodeUrl ? pUsernames.leetcodeUsername : pUsernames.codeforcesUsername, q.id); 
                         if(response){
-                          updateScoreInDatabase(q.id, null, q.points);  
+                          updateScoreInDatabase(q.id, null, Number(q.points / 2));  
                         } else {
                           toast.error('Submission not verified');
                         }

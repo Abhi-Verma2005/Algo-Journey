@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-// import { SocketProvider } from "@/hooks/SocketContext";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 import { QueryProvider } from '@/components/QueryWrapper';
+import { SocketProvider } from '@/hooks/SocketContext';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,7 +36,7 @@ export default function RootLayout({
 
         <QueryProvider>     
         <SessionProviderWrapper>
-        {/* <SocketProvider> */}
+        <SocketProvider>
         <header className="absolute w-full"><Navbar/></header>
         <main className="w-full flex justify-center min-h-screen relative"> {/* Changed from overflow-hidden to relative */}
   <div className="w-full relative"> {/* Added relative positioning */}
@@ -44,7 +44,7 @@ export default function RootLayout({
     <Toaster />
   </div>
 </main>
-        {/* </SocketProvider> */}
+        </SocketProvider>
         </SessionProviderWrapper>
         </QueryProvider>
 

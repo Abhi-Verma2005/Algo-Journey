@@ -55,17 +55,17 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       const ws = new WebSocket("ws://localhost:8080");
 
       ws.onopen = () => {
-      console.log("WebSocket connected to backend");
+      // console.log("WebSocket connected to backend");
       setIsConnected(true);
     };
 
     ws.onclose = () => {
-      console.log("WebSocket disconnected from backend");
+      // console.log("WebSocket disconnected from backend");
       setIsConnected(false);
     };
 
     ws.onerror = (error) => {
-      console.error("WebSocket error: ", error);
+      // console.error("WebSocket error: ", error);
       setIsConnected(false);
     };
 

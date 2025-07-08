@@ -3,7 +3,7 @@ import prisma from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 
 // GET: Fetch existing config only
-export async function GET(req: NextRequest) {
+export async function GET() {
   const session = await getServerSession()
 
   if (!session?.user?.email) {

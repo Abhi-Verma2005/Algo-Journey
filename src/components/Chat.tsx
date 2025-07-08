@@ -30,7 +30,7 @@ const ChatComponent: React.FC = () => {
   const { websocket } = useSocket()
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const { setUserApikey, setUserConfig, userConfig, addMessage } = useMessageStore()
+  const { setUserApikey, setUserConfig } = useMessageStore()
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [showPrompts, setShowPrompts] = useState(false);
@@ -103,7 +103,7 @@ const ChatComponent: React.FC = () => {
             setUserConfig(response.data)
           }
         return response.data;
-    } catch (error: any) {
+    } catch (error) {
       console.error('Failed to fetch user config:', error);
       return null;
     }

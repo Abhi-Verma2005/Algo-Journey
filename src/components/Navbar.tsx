@@ -39,7 +39,7 @@ const Navbar = () => {
   const { username, setUsername } = useMessageStore();
   const { setTags } = useTagStore()
   const { setCreds } = useDemo()
-  const { isDarkMode } = useStore();
+  const { isDarkMode, setPUsernames } = useStore();
 
   
   useEffect(() => {
@@ -49,12 +49,12 @@ const Navbar = () => {
           axios.post('/api/checkIfAdmin'),
           axios.post('/api/getUsername')
         ]);
-        //  const usernames = await axios.get<{
-        //     leetcodeUsername: string;
-        //     codeforcesUsername: string;  
-        //   }>('/api/user/username');
+         const usernames = await axios.post<{
+            leetcodeUsername: string;
+            codeforcesUsername: string;  
+          }>('/api/user/username');
 
-        // setPUsernames(usernames.data)
+        setPUsernames(usernames.data)
         
         setUsername(usernameResponse.data.username);
         setIsAdmin(adminResponse.data.isAdmin);

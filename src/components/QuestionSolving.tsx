@@ -194,7 +194,7 @@ const QuestionSolving = () => {
         setLoading(true);
 
         if(pUsernames.codeforcesUsername === "" || pUsernames.leetcodeUsername === ""){
-          const usernames = await axios.post<{
+          const usernames = await axios.get<{
             leetcodeUsername: string | null;
             codeforcesUsername: string | null;  
           }>('/api/user/username');

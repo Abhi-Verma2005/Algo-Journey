@@ -207,7 +207,7 @@ const ContestQuest: React.FC = () => {
   useEffect(() => {
     const checkIfAdmin = async () => {
       try {
-        const res = await axios.post('/api/user/username')
+        const res = await axios.get('/api/user/username')
         setCUsername(res.data.codeforcesUsername)
         setLUsername(res.data.leetcodeUsername)
         const coordResponse = await axios.post('/api/checkIfCoordinator')

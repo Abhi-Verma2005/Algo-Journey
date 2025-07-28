@@ -13,6 +13,7 @@ export async function OPTIONS() {
   });
 }
 
+
 export async function POST(req: Request) {
   try {
     const { externalUserId, questionSlug, contest } = await req.json();

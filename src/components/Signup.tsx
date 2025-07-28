@@ -41,6 +41,7 @@ const signupSchema = z.object({
     (email) => email.endsWith("@nst.rishihood.edu.in") || email.endsWith("@sst.scaler.com") || email.endsWith("@adypu.edu.in") || email.endsWith("@gla.ac.in") || email.endsWith("@oriental.ac.in") || email.endsWith("@maimt.com"),
     "Must use college email"
   ),
+  
   password: z.string()
     .min(8, "Password must be at least 8 characters")
     .regex(/[A-Z]/, "Must contain at least one uppercase letter")

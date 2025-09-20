@@ -14,15 +14,15 @@ export async function GET() {
         }
 
         const user = await prisma.user.findUnique({
-            where: { email: userEmail },
-            select: { codeforcesUsername: true, leetcodeUsername: true },
+            where: { email: userEmail }
         });
 
         if (!user) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 
-        return NextResponse.json({ codeforcesUsername: user.codeforcesUsername, leetcodeUsername: user.leetcodeUsername });
+    const anyUser = user as any;
+    return NextResponse.json({ codeforcesUsername: anyUser.codeforcesUsername, leetcodeUsername: anyUser.leetcodeUsername, codechefUsername: anyUser.codechefUsername });
     } catch (error) {
         console.error("Error handling request:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

@@ -41,6 +41,7 @@ export interface Question {
   id: string;
   leetcodeUrl: string | null;
   codeforcesUrl: string | null;
+  codechefUrl: string | null;
   questionTags: { id: string; name: string; }[];
   slug: string;
   points: number;
@@ -683,7 +684,7 @@ export default function UpdateContestPage({ dbQuestions }: { dbQuestions: Questi
                           >
                             <div className="flex flex-col">
                               <div className="flex items-center gap-2">
-                                <Link href={q.leetcodeUrl ? q.leetcodeUrl : q.codeforcesUrl || ''} target='_blank'>
+                                <Link href={q.leetcodeUrl ? q.leetcodeUrl : (q.codeforcesUrl ? q.codeforcesUrl : q.codechefUrl) || ''} target='_blank'>
                                   <span className="font-medium text-indigo-600 hover:underline">{q.slug}</span>
                                 </Link>
                                 <Badge className={`${getDifficultyColor(q.difficulty)}`}>

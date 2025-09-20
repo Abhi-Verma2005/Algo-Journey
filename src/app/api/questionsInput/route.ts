@@ -5,7 +5,8 @@ import { NextResponse } from "next/server";
 interface QuestionInput {
     leetcodeUrl?: string;
     codeforcesUrl?: string;
-    platform: "Leetcode" | "Codeforces";
+    codechefUrl?: string;
+    platform: "Leetcode" | "Codeforces" | "CodeChef";
     difficulty: Difficulty;
     points: number;
     slug: string;
@@ -41,6 +42,7 @@ export async function POST(req: Request) {
             data: data.map((q) => ({
                 leetcodeUrl: q.platform === "Leetcode" ? q.leetcodeUrl : null,
                 codeforcesUrl: q.platform === "Codeforces" ? q.codeforcesUrl : null,
+                codechefUrl: q.platform === "CodeChef" ? q.codechefUrl : null,
                 difficulty: q.difficulty,
                 points: q.points,
                 slug: q.slug || "slug",

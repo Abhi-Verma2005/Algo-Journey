@@ -17,6 +17,7 @@ interface Question {
   id: string;
   leetcodeUrl: string | null;
   codeforcesUrl: string | null;
+  codechefUrl: string | null;
   questionTags: { id: string; name: string; }[];
   slug: string;
   isSolved: boolean;

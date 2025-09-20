@@ -29,7 +29,9 @@ import {
   Play
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { fetchLatestSubmissionsCodeForces, fetchLatestSubmissionsLeetCode } from '@/serverActions/fetch';
+import { fetchLatestSubmissionsCodeForces, fetchLatestSubmissionsLeetCode, fetchLatestSubmissionsCodeChef } from '@/serverActions/fetch';
+// If you add a CodeChef icon at images/codechef.svg
+// import Codechef from '@/images/codechef.svg'
 import axios from 'axios';
 import CoordinatorContestPermissions from './CoordinatorContestPermissions';
 import Image from 'next/image';
@@ -69,6 +71,7 @@ const ContestQuest: React.FC = () => {
   const [isCoord, setIsCoord] = useState<boolean>(false);
   const [lusername, setLUsername] = useState('')
   const [cusername, setCUsername] = useState('')
+  const [ccusername, setCCUsername] = useState('')
   const [isVerifying, setIsVerifying] = useState<Record<string, boolean>>({});
   const { isAdmin } = useStore()
   const { questions, setQuestions } = useSocket()
@@ -100,8 +103,8 @@ const ContestQuest: React.FC = () => {
   }
 
   const handleVerify = useCallback(async (
-    platform: 'Leetcode' | 'Codeforces', 
-    problemName: string, 
+    platform: 'Leetcode' | 'Codeforces' | 'CodeChef',
+    problemName: string,
     questionId: string,
     points: number
   ): Promise<void> => {
@@ -111,20 +114,33 @@ const ContestQuest: React.FC = () => {
     }
     try {
       setIsVerifying({ ...isVerifying, [questionId]: true });
-      if (platform === "Leetcode") {
-        
-        const res = await fetchLatestSubmissionsLeetCode(lusername);
-        
-        if (res?.recentSubmissionList) {
-          let solved = res.recentSubmissionList.find(
+      if (platform === 'Leetcode') {
+        const lcRes = await fetchLatestSubmissionsLeetCode(lusername);
+        if (lcRes?.recentSubmissionList) {
+          let solved = lcRes.recentSubmissionList.find(
             (p: LeetCodeSubmission) => p.titleSlug === problemName && p.statusDisplay === 'Accepted'
           );
-          if(solved){
-            const r = await checkExistingSubmission(problemName)
-            if(r){
-              solved = undefined
-              toast.success('Already Attempted Question')
-            } 
+          if (solved) {
+            const already = await checkExistingSubmission(problemName);
+            if (already) solved = undefined;
+          }
+          if (solved) {
+            setVerifiedProblems(prev => new Set([...prev, questionId]));
+            animateScoreUpdate(score, score + points);
+            toast.success(`Problem verified! +${points} points`);
+          } else {
+            toast.error('No accepted submission found');
+          }
+        }
+      } else if (platform === 'Codeforces') {
+        const cfRes = await fetchLatestSubmissionsCodeForces(cusername);
+        if (cfRes) {
+          let solved = cfRes.find(
+            (p: CodeForcesSubmission) => (p.problem.name === problemName && p.verdict === 'OK')
+          );
+          if (solved) {
+            const already = await checkExistingSubmission(problemName);
+            if (already) solved = undefined;
           }
           if (solved) {
             setVerifiedProblems(prev => new Set([...prev, questionId]));
@@ -135,17 +151,12 @@ const ContestQuest: React.FC = () => {
           }
         }
       } else {
-        const res = await fetchLatestSubmissionsCodeForces(cusername);
-        if (res) {
-          let solved = res.find(
-            (p: CodeForcesSubmission) => (p.problem.name === problemName && p.verdict === 'OK')
-          );
-          if(solved){
-            const r = await checkExistingSubmission(problemName)
-            if(r){
-              solved = undefined
-              toast.success('Already Attempted Question')
-            } 
+        const ccRes = await fetchLatestSubmissionsCodeChef(ccusername);
+        if (Array.isArray(ccRes)) {
+          let solved = ccRes.find((code: string) => code.toLowerCase() === problemName.toLowerCase());
+          if (solved) {
+            const already = await checkExistingSubmission(problemName);
+            if (already) solved = undefined;
           }
           if (solved) {
             setVerifiedProblems(prev => new Set([...prev, questionId]));
@@ -163,7 +174,7 @@ const ContestQuest: React.FC = () => {
     } finally {
       setIsVerifying({ ...isVerifying, [questionId]: false });
     }
-  }, [cusername, lusername, isVerifying, score, verifiedProblems]);
+  }, [cusername, lusername, ccusername, isVerifying, score, verifiedProblems]);
 
   
 
@@ -176,7 +187,7 @@ const ContestQuest: React.FC = () => {
         if (!verifiedProblems.has(question.id)) {
           await new Promise(resolve => setTimeout(resolve, 500));
           await handleVerify(
-            question.question.leetcodeUrl ? 'Leetcode' : 'Codeforces',
+            question.question.leetcodeUrl ? 'Leetcode' : (question.question.codeforcesUrl ? 'Codeforces' : 'CodeChef'),
             question.question.slug,
             question.id,
             question.question.points
@@ -210,6 +221,7 @@ const ContestQuest: React.FC = () => {
         const res = await axios.get('/api/user/username')
         setCUsername(res.data.codeforcesUsername)
         setLUsername(res.data.leetcodeUsername)
+  setCCUsername(res.data.codechefUsername || '')
         const coordResponse = await axios.post('/api/checkIfCoordinator')
         if(!coordResponse.data.isCoordinator) setIsCoord(false);
         else {
@@ -552,7 +564,7 @@ const ContestQuest: React.FC = () => {
                       </div>
                       <div className="flex gap-2 w-full sm:w-auto">
                         <Link 
-                          href={q.question.leetcodeUrl || q.question.codeforcesUrl || '#'}
+                          href={q.question.leetcodeUrl || q.question.codeforcesUrl || q.question.codechefUrl || '#'}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="w-full sm:w-auto"
@@ -575,7 +587,7 @@ const ContestQuest: React.FC = () => {
                             variant="outline"
                             size="sm"
                             onClick={() => handleVerify(
-                              q.question.leetcodeUrl ? 'Leetcode' : 'Codeforces',
+                              q.question.leetcodeUrl ? 'Leetcode' : (q.question.codeforcesUrl ? 'Codeforces' : 'CodeChef'),
                               q.question.slug,
                               q.id,
                               q.question.points

@@ -115,6 +115,7 @@ const QuestionSolving = () => {
     username: string,
     questionId: string
   ): Promise<boolean> => {
+    console.log("----", platform, problemName, username, questionId);
     setIsVerifying(prev => ({ ...prev, [questionId]: true }));
     try {
       if (platform === "Leetcode") {
@@ -126,6 +127,14 @@ const QuestionSolving = () => {
         ) || false;
       } else {
         const res = await fetchLatestSubmissionsCodeForces(username);
+        console.log(".........",res);
+        console.log("========",res?.some(
+          (p: CodeForcesSubmission) => {
+            console.log("[[[[",p);
+            return p.problem.name === problemName && 
+            p.verdict === 'OK';
+          }
+        ))
         return res?.some(
           (p: CodeForcesSubmission) => 
             p.problem.name === problemName && 
@@ -457,7 +466,7 @@ const QuestionSolving = () => {
           //@ts-expect-error: not needed here.  
           const primaryTag = topics[1]
 
-          console.log(primaryTag)
+          // console.log(primaryTag)
           
           return (
             <Card 

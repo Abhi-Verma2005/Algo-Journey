@@ -126,4 +126,34 @@ export async function fetchCodeforcesUserData(username: string) {
     }
 }
 
+// CodeChef does not provide an official submissions API.
+// We'll use a lightweight scraper endpoint if provided via env, else fallback to parsing profile HTML.
+// Returns a set/list of solved problem identifiers suitable to compare with our `slug`.
+export async function fetchLatestSubmissionsCodeChef(username: string) {
+  try {
+    const service = process.env.CODECHEF_SCRAPER_URL; // Optional custom microservice that returns recent AC submissions
+    if (service) {
+      const resp = await axios.get(`${service}/codechef/${encodeURIComponent(username)}`);
+      return resp.data; // expected format: { solved: string[] } or array of slugs
+    }
+
+    // Fallback: basic scrape of CodeChef profile Recent AC activity (best-effort, may break if DOM changes)
+    const profileUrl = `https://www.codechef.com/users/${encodeURIComponent(username)}`;
+    const html = await axios.get(profileUrl, { headers: { "User-Agent": "Mozilla/5.0" } });
+    const text: string = html.data as string;
+    const solved = new Set<string>();
+    // Heuristic: problem links often look like /problems/<CODE> or /viewsolution/...
+    // Extract problem codes via regex for /problems/<CODE>
+    const problemRegex = /\/problems\/([A-Z0-9_\-]+)/g;
+    let match: RegExpExecArray | null;
+    while ((match = problemRegex.exec(text)) !== null) {
+      solved.add(match[1]);
+    }
+    return Array.from(solved);
+  } catch (error) {
+    console.error("Error fetching CodeChef submissions:", error);
+    return null;
+  }
+}
+
 

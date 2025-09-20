@@ -11,6 +11,7 @@ export async function POST(request: Request) {
         OR: [
           { leetcodeUrl: { contains: query, mode: "insensitive" } },
           { codeforcesUrl: { contains: query, mode: "insensitive" } },
+          { codechefUrl: { contains: query, mode: "insensitive" } },
           { slug: { contains: query, mode: "insensitive" } },
           { questionTags: { some: { name: { contains: query, mode: "insensitive" } } } }
         ],

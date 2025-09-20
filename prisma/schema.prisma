@@ -22,6 +22,7 @@ model User {
   leetcodeUsername    String           @unique    
   isComplete          Boolean     
   codeforcesUsername  String           @unique        
+  codechefUsername    String?          @unique
   section             String
   enrollmentNum       String           @unique
   profileUrl          String?
@@ -125,6 +126,7 @@ model Question {
   id                String               @id @default(uuid())
   leetcodeUrl       String?              @unique       
   codeforcesUrl     String?              @unique
+  codechefUrl       String?              @default("null")
   difficulty        Difficulty       
   points            Int
   questionTags      QuestionTag[]     
@@ -157,6 +159,7 @@ model QuestionTag {
 enum QuestionPlatform {
   LEETCODE
   CODEFORCES
+  CODECHEF
 }
 
 model Bookmark {
@@ -306,6 +309,16 @@ model LeetCodeStats {
   mediumSolved      Int       @default(0)
   hardSolved        Int       @default(0)
   lastUpdated       DateTime  @default(now())
+}
+
+model CodeChefStats {
+  id               String   @id @default(uuid())
+  username         String   @unique
+  email            String
+  codechefUsername String
+  userProfileUrl   String?
+  totalSolved      Int      @default(0)
+  lastUpdated      DateTime @default(now())
 }
 
 enum ApplicationStatus {

@@ -15,10 +15,11 @@ interface Question {
   slug: string;
   leetcodeUrl: string;
   codeforcesUrl: string;
+  codechefUrl?: string;
   difficulty: "BEGINNER" | "EASY" | "MEDIUM" | "HARD" | "VERYHARD";
   points: number;
   tags: string[];
-  platform: "Leetcode" | "Codeforces";
+  platform: "Leetcode" | "Codeforces" | "CodeChef";
 }
 
 const difficultyPoints = {
@@ -60,6 +61,12 @@ const extractSlugFromUrl = (url: string, platform: string): string => {
       if (match && match[1] && match[2]) {
         return `${match[1]}${match[2]}`;
       }
+    } else if (platform === "CodeChef") {
+      // Handle CodeChef URLs like: https://www.codechef.com/problems/FLOW006
+      const match = url.match(/problems\/([A-Z0-9_\-]+)/i);
+      if (match && match[1]) {
+        return match[1].toUpperCase(); // Use problem code as slug
+      }
     }
   } catch (error) {
     console.error("Error extracting slug:", error);
@@ -76,6 +83,7 @@ export default function QuestionForm() {
     slug: "",
     leetcodeUrl: "",
     codeforcesUrl: "",
+    codechefUrl: "",
     difficulty: "BEGINNER",
     points: 2,
     tags: [],
@@ -92,6 +100,7 @@ export default function QuestionForm() {
       slug: "",
       leetcodeUrl: "",
       codeforcesUrl: "",
+      codechefUrl: "",
       difficulty: "BEGINNER",
       points: 2,
       tags: [],
@@ -104,7 +113,11 @@ export default function QuestionForm() {
   // Auto-extract slug when URL changes
   useEffect(() => {
     const platform = currentQuestion.platform;
-    const url = platform === "Leetcode" ? currentQuestion.leetcodeUrl : currentQuestion.codeforcesUrl;
+    const url = platform === "Leetcode"
+      ? currentQuestion.leetcodeUrl
+      : platform === "Codeforces"
+        ? currentQuestion.codeforcesUrl
+        : currentQuestion.codechefUrl || "";
     
     if (url) {
       const extractedSlug = extractSlugFromUrl(url, platform);
@@ -115,7 +128,7 @@ export default function QuestionForm() {
         }));
       }
     }
-  }, [currentQuestion.leetcodeUrl, currentQuestion.codeforcesUrl, currentQuestion.platform]);
+  }, [currentQuestion.leetcodeUrl, currentQuestion.codeforcesUrl, currentQuestion.codechefUrl, currentQuestion.platform]);
 
   const updateCurrentQuestion = (field: keyof Question, value: string) => {
     setCurrentQuestion((prev) => {
@@ -124,6 +137,7 @@ export default function QuestionForm() {
       if (field === "platform") {
         updated.leetcodeUrl = value === "Leetcode" ? updated.leetcodeUrl : "";
         updated.codeforcesUrl = value === "Codeforces" ? updated.codeforcesUrl : "";
+        updated.codechefUrl = value === "CodeChef" ? updated.codechefUrl || "" : "";
       } else if (field === "difficulty") {
         updated.points = difficultyPoints[value as keyof typeof difficultyPoints];
       }
@@ -255,7 +269,7 @@ export default function QuestionForm() {
                       onChange={(e) => updateCurrentQuestion("leetcodeUrl", e.target.value)}
                     />
                   </div>
-                ) : (
+                ) : currentQuestion.platform === "Codeforces" ? (
                   <div className="space-y-2">
                     <Label htmlFor="codeforcesUrl">Codeforces URL</Label>
                     <Input
@@ -263,6 +277,16 @@ export default function QuestionForm() {
                       placeholder="Enter Codeforces URL"
                       value={currentQuestion.codeforcesUrl}
                       onChange={(e) => updateCurrentQuestion("codeforcesUrl", e.target.value)}
+                    />
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <Label htmlFor="codechefUrl">CodeChef URL</Label>
+                    <Input
+                      id="codechefUrl"
+                      placeholder="Enter CodeChef URL"
+                      value={currentQuestion.codechefUrl}
+                      onChange={(e) => updateCurrentQuestion("codechefUrl", e.target.value)}
                     />
                   </div>
                 )}
@@ -284,6 +308,7 @@ export default function QuestionForm() {
                     className={formErrors.slug ? "border-red-500 focus:ring-red-500" : ""}
                   />
                   {(currentQuestion.leetcodeUrl || currentQuestion.codeforcesUrl) && 
+                   (currentQuestion.codechefUrl) ||
                    currentQuestion.slug && (
                     <p className="text-xs text-gray-500 mt-1">
                       Name auto-extracted from URL. You can edit if needed.
@@ -303,6 +328,7 @@ export default function QuestionForm() {
                     <SelectContent>
                       <SelectItem value="Leetcode">Leetcode</SelectItem>
                       <SelectItem value="Codeforces">Codeforces</SelectItem>
+                      <SelectItem value="CodeChef">CodeChef</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

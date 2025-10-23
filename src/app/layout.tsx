@@ -8,7 +8,6 @@ import { QueryProvider } from "@/components/QueryWrapper";
 import { SocketProvider } from "@/hooks/SocketContext";
 import FeedbackButton from "@/components/FeedbackButton";
 import { Toaster as ShadcnToaster } from "@/components/ui/toaster";
-import useStore from "@/store/store";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

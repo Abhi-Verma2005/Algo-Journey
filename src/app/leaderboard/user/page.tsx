@@ -30,22 +30,21 @@ const fetchLeaderboardData = async (endpoint: string, weekOffset: number = 0) =>
   const response = await axios.post(endpoint, { weekOffset });
   return response.data;
 };
-
 const getRankColor = (rank: number) => {
   switch(rank) {
-    case 1: return "bg-yellow-500 text-black";
-    case 2: return "bg-pink-500 text-black";
-    case 3: return "bg-blue-500 text-black";
+    case 1: return "bg-zinc-900 text-white";
+    case 2: return "bg-zinc-800 text-white";
+    case 3: return "bg-zinc-700 text-white";
     default: return "bg-zinc-700 text-white";
   }
 };
 
 const getTrophyColor = (rank: number) => {
   switch(rank) {
-    case 1: return "text-yellow-500";
-    case 2: return "text-pink-500";
-    case 3: return "text-blue-500";
-    default: return "text-zinc-700";
+    case 1: return "text-zinc-200";
+    case 2: return "text-zinc-300";
+    case 3: return "text-zinc-400";
+    default: return "text-zinc-500";
   }
 };
 
@@ -79,7 +78,7 @@ const WeekSelector = ({
       </Button>
       
       <div className={`flex items-center gap-3 text-sm ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>
-        <Calendar className={`h-5 w-5 ${isDarkMode ? 'text-indigo-400' : 'text-indigo-500'}`} />
+    <Calendar className={`h-5 w-5 ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`} />
         <span className="font-medium">Week of {startOfWeek.toLocaleDateString()}</span>
       </div>
 
@@ -129,7 +128,7 @@ const GroupRankings = ({ groups, isDarkMode }: { groups: Group[] | undefined; is
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Award className="h-5 w-5 text-amber-500" />
+            <Award className="h-5 w-5 text-zinc-400" />
             <span className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-zinc-800'}`}>
               {group.groupPoints} pts
             </span>
@@ -146,7 +145,7 @@ const WeeklyRankings = ({ users, isDarkMode }: { users: User[] | undefined; isDa
   if (!users || users.length === 0) {
     return (
       <div className={`text-center py-8 ${isDarkMode ? 'text-zinc-400 bg-[#262626]' : 'text-zinc-500 bg-white/90'} rounded-lg shadow-sm`}>
-        <Trophy className={`h-12 w-12 mx-auto mb-4 ${isDarkMode ? 'text-zinc-600' : 'text-zinc-400'}`} />
+  <Trophy className={`h-12 w-12 mx-auto mb-4 ${isDarkMode ? 'text-zinc-600' : 'text-zinc-400'}`} />
         No rankings available for this week
       </div>
     );
@@ -167,10 +166,10 @@ const WeeklyRankings = ({ users, isDarkMode }: { users: User[] | undefined; isDa
           <div className="flex-1 flex items-center gap-3">
             {/* <User className={`h-5 w-5 ${isDarkMode ? 'text-zinc-400' : 'text-zinc-500'}`} /> */}
             {isAdmin ? <Link href={`/user/updateProfile/${user.username}`} target="_blank">
-              <p className={`font-semibold ${isDarkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-700 hover:text-blue-800'} transition-colors`}>
+              <p className={`font-semibold ${isDarkMode ? 'text-zinc-300 hover:text-zinc-200' : 'text-zinc-800 hover:text-zinc-900'} transition-colors`}>
                 {user.username}
               </p>
-            </Link> : <p className={`font-semibold ${isDarkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-700 hover:text-blue-800'} transition-colors`}>
+            </Link> : <p className={`font-semibold ${isDarkMode ? 'text-zinc-300 hover:text-zinc-200' : 'text-zinc-800 hover:text-zinc-900'} transition-colors`}>
                 {user.username}
               </p>}
           </div>

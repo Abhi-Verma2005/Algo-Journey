@@ -23,7 +23,6 @@ import {
   Settings,
   ShieldCheck,
   ChartNoAxesColumnIcon,
-  UserCog,
   LucideSword,
   Brain,
   User,

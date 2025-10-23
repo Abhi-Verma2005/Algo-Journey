@@ -77,22 +77,22 @@ const categoryColors: Record<
   }
 > = {
   algorithms: {
-    bg: "bg-indigo-500",
-    border: "border-indigo-400",
-    text: "text-indigo-500",
-    lightBg: "bg-indigo-50",
+    bg: "bg-zinc-800",
+    border: "border-zinc-700",
+    text: "text-zinc-800",
+    lightBg: "bg-zinc-100",
   },
   dataStructures: {
-    bg: "bg-teal-500",
-    border: "border-teal-400",
-    text: "text-teal-500",
-    lightBg: "bg-teal-50",
+    bg: "bg-zinc-800",
+    border: "border-zinc-700",
+    text: "text-zinc-800",
+    lightBg: "bg-zinc-100",
   },
   concepts: {
-    bg: "bg-blue-500",
-    border: "border-blue-400",
-    text: "text-blue-500",
-    lightBg: "bg-blue-50",
+    bg: "bg-zinc-800",
+    border: "border-zinc-700",
+    text: "text-zinc-800",
+    lightBg: "bg-zinc-100",
   },
 };
 
@@ -209,12 +209,7 @@ const TopicGrid: React.FC = () => {
                     isDarkMode ? "text-gray-200" : "text-gray-800"
                   }`}
                 >
-                  DSA{" "}
-                  <span
-                    className={isDarkMode ? "text-blue-400" : "text-blue-600"}
-                  >
-                    Topics
-                  </span>
+                  DSA <span className={isDarkMode ? 'text-zinc-300' : 'text-zinc-900'}>Topics</span>
                 </CardTitle>
                 <p
                   className={`mt-1 ${
@@ -225,11 +220,7 @@ const TopicGrid: React.FC = () => {
                 </p>
               </div>
               <div className="flex p-2 justify-center items-center">
-                <Trophy
-                  className={`h-10 w-10 mx-3 ${
-                    isDarkMode ? "text-blue-400" : "text-blue-500"
-                  }`}
-                />
+                <Trophy className={`h-10 w-10 mx-3 ${isDarkMode ? 'text-zinc-200' : 'text-zinc-800'}`} />
               </div>
             </div>
           </CardHeader>
@@ -314,26 +305,22 @@ const TopicGrid: React.FC = () => {
                         }
                       > = {
                         algorithms: {
-                          bg: "bg-indigo-500",
-                          border: "border-indigo-500/50",
-                          text: isDarkMode
-                            ? "text-indigo-400"
-                            : "text-indigo-500",
-                          lightBg: isDarkMode
-                            ? "bg-indigo-900/20"
-                            : "bg-indigo-50",
+                          bg: "bg-zinc-800",
+                          border: "border-zinc-700/50",
+                          text: isDarkMode ? "text-zinc-200" : "text-zinc-800",
+                          lightBg: isDarkMode ? "bg-[#111111]" : "bg-zinc-100",
                         },
                         dataStructures: {
-                          bg: "bg-teal-500",
-                          border: "border-teal-500/50",
-                          text: isDarkMode ? "text-white" : "text-teal-500",
-                          lightBg: isDarkMode ? "bg-[#303030]" : "bg-teal-50",
+                          bg: "bg-zinc-800",
+                          border: "border-zinc-700/50",
+                          text: isDarkMode ? "text-zinc-200" : "text-zinc-800",
+                          lightBg: isDarkMode ? "bg-[#111111]" : "bg-zinc-100",
                         },
                         concepts: {
-                          bg: "bg-blue-500",
-                          border: "border-blue-500/50",
-                          text: isDarkMode ? "text-white" : "text-blue-500",
-                          lightBg: isDarkMode ? "bg-[#333333]" : "bg-blue-50",
+                          bg: "bg-zinc-800",
+                          border: "border-zinc-700/50",
+                          text: isDarkMode ? "text-zinc-200" : "text-zinc-800",
+                          lightBg: isDarkMode ? "bg-[#111111]" : "bg-zinc-100",
                         },
                       };
 
@@ -378,14 +365,11 @@ const TopicGrid: React.FC = () => {
                         >
                           <CardHeader className="pb-2">
                             <div className="flex items-center justify-between">
-                              <h3
-                                className={`text-lg font-semibold ${adaptiveColors.text}`}
-                              >
-                                {topic}
-                              </h3>
-                              <div
-                                className={`${adaptiveColors.lightBg} px-3 py-0.5 text-xs text-green-300 rounded-full`}
-                              >
+                              <div className="flex items-center gap-3">
+                                <div className={`p-1 rounded ${isDarkMode ? 'bg-[#111111]' : 'bg-zinc-100'} text-zinc-300`}>{icon}</div>
+                                <h3 className={`text-lg font-semibold ${adaptiveColors.text}`}>{topic}</h3>
+                              </div>
+                              <div className={`${adaptiveColors.lightBg} px-3 py-0.5 text-xs text-zinc-300 rounded-full`}>
                                 {topicData.solved || 0}/{topicData.total || 0}
                               </div>
                             </div>

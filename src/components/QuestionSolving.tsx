@@ -299,7 +299,7 @@ const QuestionSolving = () => {
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} transition-colors duration-300`}>
       <div className={`container mx-auto p-4 mt-16 max-w-6xl ${isDarkMode ? 'dark' : ''}`}>
-        <Card className={`mb-6 ${isDarkMode ? 'bg-gray-800/90 border-gray-700' : 'bg-indigo-50/90 border-indigo-100'} shadow-sm`}>
+  <Card className={`mb-6 ${isDarkMode ? 'bg-gray-800/90 border-gray-700' : 'bg-white/90 border-zinc-100'} shadow-sm`}>
           <CardContent className="py-6">
             <div className="flex justify-between items-center mb-4">
               <Skeleton className={`h-8 w-48 ${isDarkMode ? 'bg-gray-700' : ''}`} />
@@ -354,8 +354,8 @@ const QuestionSolving = () => {
 }
 
   return (
-  <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} transition-colors duration-300`}>
-    <div className={`container mx-auto p-4 max-w-6xl ${isDarkMode ? 'dark' : ''}`}>
+  <div className={`min-h-screen ${isDarkMode ? 'bg-[#0A0A0A]' : 'bg-white'} transition-colors duration-300`}>
+    <div className={`container mx-auto px-4 py-8 md:py-30 pt-20 space-y-8 max-w-6xl`}>
     
     {/* Show API Key Banner if not configured */}
     {showApiBanner && (
@@ -365,18 +365,20 @@ const QuestionSolving = () => {
     )}
     
     <Card className={`mb-6 ${showApiBanner ? '' : 'mt-16'} ${isDarkMode ? 'bg-gray-800/90 border-gray-700' : 'bg-indigo-50/90 border-indigo-100'} shadow-sm`}>
-      <CardContent className="py-6">
-        <div className="flex justify-between items-center mb-6">
+      <CardHeader className="py-6">
+        <div className="flex justify-between items-center">
           <div>
-            <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-indigo-300' : 'text-indigo-800'}`}>Practice Questions</h2>
-            <p className={`text-sm ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'} mt-1`}>Master algorithms through consistent practice</p>
+            <CardTitle className={`text-2xl font-bold ${isDarkMode ? 'text-zinc-200' : 'text-zinc-900'}`}>Practice Questions</CardTitle>
+            <p className={`text-sm ${isDarkMode ? 'text-zinc-400' : 'text-zinc-700'} mt-1`}>Master algorithms through consistent practice</p>
           </div>
-          <div className={`${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-indigo-100'} p-4 rounded-lg shadow-sm border`}>
+          <div className={`${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-zinc-100'} p-4 rounded-lg shadow-sm border`}>
             <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-1`}>Total Score</p>
-            <p className={`text-3xl font-bold ${isDarkMode ? 'text-indigo-400' : 'text-indigo-700'}`}>{score}</p>
+            <p className={`text-3xl font-bold ${isDarkMode ? 'text-zinc-200' : 'text-zinc-900'}`}>{score}</p>
           </div>
         </div>
-        
+      </CardHeader>
+
+      <CardContent>
         <div className="space-y-6">
           <div className={`${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-100'} p-4 rounded-lg border`}>
             <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
@@ -385,7 +387,7 @@ const QuestionSolving = () => {
                 value={selectedDifficulty}
                 onValueChange={setSelectedDifficulty}
               >
-                <SelectTrigger className={`w-full md:w-48 ${isDarkMode ? 'bg-gray-600 border-gray-500 text-gray-200' : 'bg-white border-indigo-200 text-indigo-700'}`}>
+                <SelectTrigger className={`w-full md:w-48 ${isDarkMode ? 'bg-gray-600 border-gray-500 text-gray-200' : 'bg-white border-zinc-200 text-zinc-800'}`}>
                   <SelectValue placeholder="Select Difficulty" />
                 </SelectTrigger>
                 <SelectContent className={isDarkMode ? 'bg-gray-700 border-gray-600' : ''}>
@@ -400,8 +402,8 @@ const QuestionSolving = () => {
                 className={`${
                   showBookmarkedOnly 
                     ? 'bg-yellow-500 hover:bg-yellow-600' 
-                    : `${isDarkMode ? 'bg-indigo-500 hover:bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-500'}`
-                } text-white`} 
+                    : `${isDarkMode ? 'bg-zinc-800 hover:bg-zinc-700 text-white' : 'bg-black hover:bg-zinc-800 text-white'}`
+                }`} 
                 onClick={() => setShowBookmarkedOnly((prev) => !prev)}
               >
                 {showBookmarkedOnly ? (
@@ -416,7 +418,7 @@ const QuestionSolving = () => {
                   </>
                 )}
               </Button>
-              <Button className={`${isDarkMode ? 'bg-indigo-500 hover:bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-500'}`} onClick={() => setSelectSolved((p) => !p)}>Toggle not Solved</Button>
+              <Button className={`${isDarkMode ? 'bg-zinc-800 hover:bg-zinc-700 text-white' : 'bg-black hover:bg-zinc-800 text-white'}`} onClick={() => setSelectSolved((p) => !p)}>Toggle not Solved</Button>
             </div>
 
             <div className="space-y-3">
@@ -469,24 +471,24 @@ const QuestionSolving = () => {
             case "BEGINNER":
             case "EASY":
               difficultyColor = isDarkMode 
-                ? "bg-green-500/20 text-green-400 border-green-500/30" 
-                : "bg-green-500/10 text-green-700 border-green-200";
+                ? "bg-zinc-800/20 text-zinc-300 border-zinc-700/30" 
+                : "bg-zinc-100 text-zinc-800 border-zinc-200";
               break;
             case "MEDIUM":
               difficultyColor = isDarkMode 
-                ? "bg-amber-500/20 text-amber-400 border-amber-500/30" 
-                : "bg-amber-500/10 text-amber-700 border-amber-200";
+                ? "bg-zinc-800/20 text-zinc-300 border-zinc-700/30" 
+                : "bg-zinc-100 text-zinc-800 border-zinc-200";
               break;
             case "HARD":
             case "VERYHARD":
               difficultyColor = isDarkMode 
-                ? "bg-red-500/20 text-red-400 border-red-500/30" 
-                : "bg-red-500/10 text-red-700 border-red-200";
+                ? "bg-zinc-800/20 text-zinc-300 border-zinc-700/30" 
+                : "bg-zinc-100 text-zinc-800 border-zinc-200";
               break;
             default:
               difficultyColor = isDarkMode 
-                ? "bg-gray-500/20 text-gray-400 border-gray-500/30" 
-                : "bg-gray-500/10 text-gray-700 border-gray-200";
+                ? "bg-zinc-800/20 text-zinc-300 border-zinc-700/30" 
+                : "bg-zinc-100 text-zinc-800 border-zinc-200";
           }
           
           // Get primary tag (first tag, or Two Pointers if it exists)
@@ -500,7 +502,7 @@ const QuestionSolving = () => {
               key={q.id}
               className={`transition-all duration-300 hover:shadow-md ${
                 q.isSolved || solvedProblems.has(q.id) 
-                  ? `${isDarkMode ? 'bg-green-900/20 border-green-700/50' : 'bg-green-50/50 border-green-200'}`
+                    ? `${isDarkMode ? 'bg-zinc-900/20 border-zinc-700/50' : 'bg-zinc-100/50 border-zinc-200'}`
                   : `${isDarkMode ? 'bg-gray-800 border-gray-700 hover:border-indigo-500/50' : 'bg-white border-gray-100 hover:border-indigo-200'}`
               }`}
             >
@@ -509,14 +511,14 @@ const QuestionSolving = () => {
                   <div className="flex items-center gap-2">
                     <CardTitle className={`text-xl ${
                       q.isSolved ? 
-                        (isDarkMode ? 'text-green-400' : 'text-green-800') :
+                        (isDarkMode ? 'text-zinc-300' : 'text-zinc-800') :
                         (isDarkMode ? 'text-indigo-300' : 'text-indigo-800')
                     }`}>
                       {q.slug}
                     </CardTitle>
                     {q.isSolved || solvedProblems.has(q.id) && (
                       <div className="flex items-center gap-1">
-                        <Check className={`h-5 w-5 ${isDarkMode ? 'text-green-400' : 'text-green-600'}`} />
+                        <Check className={`h-5 w-5 ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`} />
                         <span className={`text-xs font-medium ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>Solved</span>
                       </div>
                     )}

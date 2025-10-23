@@ -52,7 +52,6 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import useStore from "@/store/store";
 import CodeforcesApiBanner from "@/components/CodeforcesApiBanner";
-import { AnimatedGradientText } from "@/components/ui/animated-gradient-text";
 
 interface GroupMember {
   username: string;

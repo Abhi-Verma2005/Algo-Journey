@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
-const admins = ['Abhishek Verma', 'Taj', 'Kunal', 'Sai','anshsx-D'];
+const admins = ['Abhishek Verma', 'Taj', 'Kunal', 'Sai'];
 
 export async function POST() {
   try {

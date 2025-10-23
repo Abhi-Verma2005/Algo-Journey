@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { X, AlertCircle } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import axios from 'axios';
+import useStore from '@/store/store';
 
 interface CodeforcesApiBannerProps {
   onClose?: () => void;
@@ -13,6 +14,7 @@ interface CodeforcesApiBannerProps {
 const CodeforcesApiBanner: React.FC<CodeforcesApiBannerProps> = ({ onClose }) => {
   const { data: session } = useSession();
   const [username, setUsername] = useState<string>('');
+  const { isDarkMode } = useStore();
 
   useEffect(() => {
     const fetchUsername = async () => {
@@ -32,37 +34,37 @@ const CodeforcesApiBanner: React.FC<CodeforcesApiBannerProps> = ({ onClose }) =>
   const profileLink = username ? `/user/updateProfile/${username}` : '/user/updateProfile';
 
   return (
-    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 dark:from-blue-900/20 dark:to-indigo-900/20 dark:border-blue-400 rounded-lg shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+    <div className={`rounded-2xl ${isDarkMode ? "bg-[#262626]" : "bg-zinc-100"}`}>
+      <div className="max-w-7xl mx-auto py-2 px-4">
         <div className="flex items-center justify-between flex-wrap">
           <div className="w-0 flex-1 flex items-center">
-            <span className="flex p-2 rounded-lg bg-blue-500 dark:bg-blue-600">
+            <span className={`flex p-2 rounded-2xl ${isDarkMode ? "bg-[#404040]" : "bg-blue-500"}`}>
               <AlertCircle className="h-5 w-5 text-white" aria-hidden="true" />
             </span>
-            <p className="ml-3 font-medium text-gray-800 dark:text-gray-200">
+            <p className={`ml-3 font-medium ${isDarkMode ? "text-gray-200" : "text-gray-800"}`}>
               <span className="md:hidden">Add your Codeforces API key!</span>
               <span className="hidden md:inline">
                 ⚡ Add your Codeforces API key to get faster and more reliable submission verification.
               </span>
             </p>
           </div>
-          <div className="order-3 mt-2 flex-shrink-0 w-full sm:order-2 sm:mt-0 sm:w-auto">
+          <div className="order-3 mt-2 shrink-0 w-full sm:order-2 sm:mt-0 sm:w-auto">
             <Link
               href={profileLink}
-              className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors"
+              className={`flex items-center rounded-xl justify-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium text-white ${isDarkMode ? "bg-[#404040] hover:bg-[#434343]" : "bg-blue-600 hover:bg-blue-700"} transition-colors`}
             >
               Add API Key
             </Link>
           </div>
           {onClose && (
-            <div className="order-2 flex-shrink-0 sm:order-3 sm:ml-3">
+            <div className="order-2 shrink-0 sm:order-3 sm:ml-3">
               <button
                 type="button"
                 onClick={onClose}
-                className="-mr-1 flex p-2 rounded-md hover:bg-blue-100 dark:hover:bg-blue-800/30 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2 transition-colors"
+                className={`-mr-1 flex p-2 rounded-md ${isDarkMode ? "text-white" : "text-black"} sm:-mr-2 transition-colors`}
               >
                 <span className="sr-only">Dismiss</span>
-                <X className="h-5 w-5 text-gray-600 dark:text-gray-300" aria-hidden="true" />
+                <X className="h-5 w-5" aria-hidden="true" />
               </button>
             </div>
           )}

@@ -47,6 +47,7 @@ import { useRouter } from 'next/navigation';
 import { fetchCodeforcesUserData, fetchLatestSubmissionsLeetCode, fetchUserStats } from '@/serverActions/fetch';
 import { useQuery } from '@tanstack/react-query';
 import useStore from '@/store/store';
+import CodeforcesApiBanner from '@/components/CodeforcesApiBanner';
 
 interface GroupMember {
   username: string;
@@ -157,6 +158,7 @@ export default function Dashboard() {
   const { setPUsernames } = useStore()
   const { data: session, status } = useSession();
   const [showTeamMembers, setShowTeamMembers] = useState(false);
+  const [showApiBanner, setShowApiBanner] = useState<boolean>(false);
   const fetchDashboardData = async (): Promise<DashboardData> => {
     try {
       setLoadingContest(true)
@@ -291,6 +293,26 @@ export default function Dashboard() {
     }
   }, [status]);
 
+  // Check for Codeforces API keys on mount
+  useEffect(() => {
+    const checkApiKeys = async () => {
+      if (session?.user?.email) {
+        try {
+          const response = await axios.get('/api/user/codeforces-api');
+          if (!response.data.hasApiKey) {
+            setShowApiBanner(true);
+          }
+        } catch (error) {
+          console.error('Error checking API keys:', error);
+          // If error, assume no API keys and show banner
+          setShowApiBanner(true);
+        }
+      }
+    };
+
+    checkApiKeys();
+  }, [session?.user?.email]);
+
 
   const getLeetCodeDifficultyPercentage = (solved: number, total: number) => {
     return solved && total ? Math.round((solved / total) * 100) : 0;
@@ -315,6 +337,13 @@ export default function Dashboard() {
   <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} transition-colors duration-300`}>
     <div className="container mx-auto p-8 pt-20 space-y-8">
       <>
+        {/* Codeforces API Key Banner */}
+        {showApiBanner && (
+          <div className="mb-6">
+            <CodeforcesApiBanner onClose={() => setShowApiBanner(false)} />
+          </div>
+        )}
+
         {/* Welcome header with avatar */}
         <div className="flex items-center justify-between mb-8">
           <div>

@@ -328,6 +328,18 @@ model UserConfig {
   user                        User     @relation(fields: [userEmail], references: [email])
 }
 
+model Feedback {
+  id        String   @id @default(uuid())
+  userId    String
+  username  String
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
 enum Rank {
   novice_1
   novice_2

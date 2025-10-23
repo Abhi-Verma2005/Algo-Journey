@@ -6,6 +6,8 @@ import Navbar from "@/components/Navbar";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 import { QueryProvider } from '@/components/QueryWrapper';
 import { SocketProvider } from '@/hooks/SocketContext';
+import FeedbackButton from '@/components/FeedbackButton';
+import { Toaster as ShadcnToaster } from "@/components/ui/toaster";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,8 +44,10 @@ export default function RootLayout({
   <div className="w-full relative"> {/* Added relative positioning */}
     {children}
     <Toaster />
+    <ShadcnToaster />
   </div>
 </main>
+        <FeedbackButton />
         </SocketProvider>
         </SessionProviderWrapper>
         </QueryProvider>

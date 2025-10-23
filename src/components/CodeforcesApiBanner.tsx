@@ -29,7 +29,7 @@ const CodeforcesApiBanner: React.FC<CodeforcesApiBannerProps> = ({ onClose }) =>
     fetchUsername();
   }, [session?.user?.email]);
 
-  const profileLink = username ? `/user/profile/${username}` : '/user/profile';
+  const profileLink = username ? `/user/updateProfile/${username}` : '/user/updateProfile';
 
   return (
     <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 dark:from-blue-900/20 dark:to-indigo-900/20 dark:border-blue-400 rounded-lg shadow-sm">

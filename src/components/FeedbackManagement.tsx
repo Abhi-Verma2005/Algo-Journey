@@ -63,9 +63,15 @@ const FeedbackManagement: React.FC = () => {
         setFeedbacks(response.data.feedback);
         setTotalCount(response.data.pagination.total);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error fetching feedback:', error);
-      toast.error(error.response?.data?.error || 'Failed to fetch feedback');
+      const errorMessage = error && typeof error === 'object' && 'response' in error && 
+                          error.response && typeof error.response === 'object' && 
+                          'data' in error.response && error.response.data && 
+                          typeof error.response.data === 'object' && 'error' in error.response.data
+                          ? String(error.response.data.error)
+                          : 'Failed to fetch feedback';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -94,9 +100,15 @@ const FeedbackManagement: React.FC = () => {
         setFeedbacks(feedbacks.filter((f) => f.id !== selectedFeedback.id));
         setTotalCount(totalCount - 1);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error deleting feedback:', error);
-      toast.error(error.response?.data?.error || 'Failed to delete feedback');
+      const errorMessage = error && typeof error === 'object' && 'response' in error && 
+                          error.response && typeof error.response === 'object' && 
+                          'data' in error.response && error.response.data && 
+                          typeof error.response.data === 'object' && 'error' in error.response.data
+                          ? String(error.response.data.error)
+                          : 'Failed to delete feedback';
+      toast.error(errorMessage);
     } finally {
       setDeleting(null);
       setDeleteDialogOpen(false);

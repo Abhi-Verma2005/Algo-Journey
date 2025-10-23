@@ -148,11 +148,11 @@ export async function DELETE(req: Request) {
       success: true,
       message: 'Feedback deleted successfully',
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error deleting feedback:', error);
     
     // Handle case where feedback doesn't exist
-    if (error.code === 'P2025') {
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'P2025') {
       return NextResponse.json({ error: 'Feedback not found' }, { status: 404 });
     }
     

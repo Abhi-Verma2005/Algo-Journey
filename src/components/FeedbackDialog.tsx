@@ -67,11 +67,17 @@ const FeedbackDialog: React.FC<FeedbackDialogProps> = ({ open, onOpenChange }) =
           onOpenChange(false);
         }, 2000);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error submitting feedback:', error);
+      const errorMessage = error && typeof error === 'object' && 'response' in error && 
+                          error.response && typeof error.response === 'object' && 
+                          'data' in error.response && error.response.data && 
+                          typeof error.response.data === 'object' && 'error' in error.response.data
+                          ? String(error.response.data.error)
+                          : 'Failed to submit feedback. Please try again.';
       toast({
         title: 'Error',
-        description: error.response?.data?.error || 'Failed to submit feedback. Please try again.',
+        description: errorMessage,
         variant: 'destructive',
       });
     } finally {

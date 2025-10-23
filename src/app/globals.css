@@ -130,3 +130,21 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Make root elements fill viewport and match bg to avoid showing different underlying color
+   when rubber-band/overscroll happens (especially on macOS). Also prevent scroll chaining. */
+html, body, #__next {
+  height: 100%;
+  width: 100%;
+  background: hsl(var(--background));
+  overscroll-behavior-y: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Optional utility: use this on your main scroll container to confine scrolling there. */
+.app-scroll {
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}

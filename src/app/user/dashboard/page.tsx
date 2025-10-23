@@ -347,7 +347,7 @@ export default function Dashboard() {
         isDarkMode ? "bg-[#0A0A0A]" : "bg-white"
       } transition-colors duration-300`}
     >
-      <div className="container mx-auto px-4 py-8 md:py-40 pt-20 space-y-8">
+      <div className="container mx-auto px-4 py-8 md:py-30 pt-20 space-y-8">
         <>
           {/* Codeforces API Key Banner */}
           {showApiBanner && (

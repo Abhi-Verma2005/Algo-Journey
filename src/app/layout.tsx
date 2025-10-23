@@ -8,6 +8,7 @@ import { QueryProvider } from "@/components/QueryWrapper";
 import { SocketProvider } from "@/hooks/SocketContext";
 import FeedbackButton from "@/components/FeedbackButton";
 import { Toaster as ShadcnToaster } from "@/components/ui/toaster";
+import useStore from "@/store/store";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,10 +39,10 @@ export default function RootLayout({
         <QueryProvider>
           <SessionProviderWrapper>
             <SocketProvider>
-              <header className="absolute w-full">
+              <header className="fixed top-0 left-0 w-full z-50">
                 <Navbar />
               </header>
-              <main className="w-full flex justify-center min-h-screen relative">
+              <main className="w-full flex justify-center min-h-screen relative pt-16 app-scroll">
                 {" "}
                 {/* Changed from overflow-hidden to relative */}
                 <div className="w-full relative">

@@ -218,7 +218,7 @@ const FeedbackManagement: React.FC = () => {
                               onClick={() => {
                                 toast.custom(
                                   (t) => (
-                                    <div className="bg-white rounded-lg shadow-lg p-6 max-w-2xl">
+                                    <div className="bg-white rounded-lg shadow-none p-6 max-w-2xl">
                                       <div className="flex items-start justify-between mb-4">
                                         <div className="flex items-center gap-2">
                                           <User className="h-4 w-4 text-gray-500" />

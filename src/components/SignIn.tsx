@@ -122,15 +122,15 @@ export default function SignIn() {
               {/* Tree Structure */}
               <g className="animate-pulse">
                 {/* Root Node */}
-                <circle cx="400" cy="100" r="25" fill="#4F46E5" className="drop-shadow-lg"/>
+                <circle cx="400" cy="100" r="25" fill="#4F46E5" className="drop-shadow-none"/>
                 <text x="400" y="107" textAnchor="middle" className="fill-white text-sm font-bold">1</text>
                 
                 {/* Level 2 */}
                 <line x1="400" y1="125" x2="300" y2="175" stroke="#6366F1" strokeWidth="3"/>
                 <line x1="400" y1="125" x2="500" y2="175" stroke="#6366F1" strokeWidth="3"/>
-                <circle cx="300" cy="200" r="20" fill="#7C3AED" className="drop-shadow-lg"/>
+                <circle cx="300" cy="200" r="20" fill="#7C3AED" className="drop-shadow-none"/>
                 <text x="300" y="207" textAnchor="middle" className="fill-white text-sm font-bold">2</text>
-                <circle cx="500" cy="200" r="20" fill="#7C3AED" className="drop-shadow-lg"/>
+                <circle cx="500" cy="200" r="20" fill="#7C3AED" className="drop-shadow-none"/>
                 <text x="500" y="207" textAnchor="middle" className="fill-white text-sm font-bold">3</text>
                 
                 {/* Level 3 */}

@@ -358,7 +358,7 @@ export default function UpdateContestPage({ dbQuestions }: { dbQuestions: Questi
   if (!showForm) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md shadow-lg border-t-4 border-t-indigo-500">
+        <Card className="w-full max-w-md shadow-none border-t-4 border-t-indigo-500">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl font-bold text-center flex items-center justify-center gap-2">
               <Clock className="w-6 h-6 text-indigo-500" />
@@ -456,7 +456,7 @@ export default function UpdateContestPage({ dbQuestions }: { dbQuestions: Questi
         {/* Contest Summary Card */}
         {contest && (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            <Card className="bg-white shadow-sm border-l-4 border-l-indigo-400">
+            <Card className="bg-white shadow-none border-l-4 border-l-indigo-400">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <Clock className="h-4 w-4 text-indigo-500" />
@@ -469,7 +469,7 @@ export default function UpdateContestPage({ dbQuestions }: { dbQuestions: Questi
               </CardContent>
             </Card>
             
-            <Card className="bg-white shadow-sm border-l-4 border-l-green-400">
+            <Card className="bg-white shadow-none border-l-4 border-l-green-400">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <Calendar className="h-4 w-4 text-green-500" />
@@ -482,7 +482,7 @@ export default function UpdateContestPage({ dbQuestions }: { dbQuestions: Questi
               </CardContent>
             </Card>
             
-            <Card className="bg-white shadow-sm border-l-4 border-l-amber-400">
+            <Card className="bg-white shadow-none border-l-4 border-l-amber-400">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <Tag className="h-4 w-4 text-amber-500" />
@@ -495,7 +495,7 @@ export default function UpdateContestPage({ dbQuestions }: { dbQuestions: Questi
               </CardContent>
             </Card>
             
-            <Card className="bg-white shadow-sm border-l-4 border-l-blue-400">
+            <Card className="bg-white shadow-none border-l-4 border-l-blue-400">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <Users className="h-4 w-4 text-blue-500" />

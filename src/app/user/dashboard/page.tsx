@@ -414,7 +414,7 @@ export default function Dashboard() {
               <Card
                 className={`${
                   isDarkMode ? "bg-[#262626]" : "bg-zinc-100"
-                } transition-all border-0 shadow-none`}
+                } transition-all border-0 shadow-none rounded-3xl`}
               >
                 <CardHeader className="pb-2">
                   <CardTitle
@@ -480,7 +480,7 @@ export default function Dashboard() {
               <Card
                 className={`${
                   isDarkMode ? "bg-[#262626]" : "bg-zinc-100"
-                } transition-all border-0 shadow-none`}
+                } transition-all border-0 shadow-none rounded-3xl`}
               >
                 <CardHeader className="pb-2">
                   <CardTitle
@@ -546,7 +546,7 @@ export default function Dashboard() {
               <Card
                 className={`${
                   isDarkMode ? "bg-[#262626]" : "bg-zinc-100"
-                } transition-all border-0 shadow-none`}
+                } transition-all border-0 shadow-none rounded-3xl`}
               >
                 <CardHeader className="pb-2">
                   <CardTitle
@@ -614,7 +614,7 @@ export default function Dashboard() {
               <Card
                 className={`${
                   isDarkMode ? "bg-[#262626]" : "bg-zinc-100"
-                } transition-all border-0 shadow-none`}
+                } transition-all border-0 shadow-none rounded-3xl`}
               >
                 <CardHeader className="pb-2">
                   <CardTitle
@@ -743,7 +743,7 @@ export default function Dashboard() {
               <Card
                 className={`${
                   isDarkMode ? "bg-[#262626]" : "bg-zinc-100"
-                } shadow-none transition-all border-0`}
+                } shadow-none transition-all border-0 rounded-3xl`}
               >
                 <CardHeader
                   className={`${
@@ -794,7 +794,7 @@ export default function Dashboard() {
                     </div>
                     <div
                       className={`w-full ${
-                        isDarkMode ? "bg-[#404040]" : "bg-zinc-100"
+                        isDarkMode ? "bg-[#404040]" : "bg-zinc-200"
                       } rounded-full h-2.5`}
                     >
                       {platformData?.leetcodeData && (
@@ -1054,7 +1054,7 @@ export default function Dashboard() {
               <Card
                 className={`${
                   isDarkMode ? "bg-[#262626]" : "bg-zinc-100"
-                } transition-all shadow-none border-0`}
+                } transition-all shadow-none border-0 rounded-3xl`}
               >
                 <CardHeader
                   className={`${
@@ -1308,7 +1308,7 @@ export default function Dashboard() {
             <Card
               className={`${
                 isDarkMode ? "bg-[#262626]" : "bg-zinc-100"
-              } rounded-2xl transition-all shadow-none border-0`}
+              } rounded-2xl transition-all shadow-none border-0 rounded-3xl`}
             >
               <CardHeader
                 className={`${
@@ -1456,7 +1456,7 @@ export default function Dashboard() {
                         {contest.status === "ACTIVE" && (
                           <Button
                             variant={!isDarkMode ? "outline" : "ghost"}
-                            className="bg-indigo-500 hover:bg-indigo-600 text-white shadow-md transition-all"
+                            className="bg-indigo-500 hover:bg-indigo-600 text-white shadow-none transition-all"
                             onClick={() =>
                               router.push(`/contest/${contest.id}`)
                             }
@@ -1505,7 +1505,7 @@ export default function Dashboard() {
             <Card
               className={`border-0 rounded-2xl ${
                 isDarkMode ? "bg-[#262626]" : "bg-zinc-100"
-              } transition-all shadow-none border-0`}
+              } transition-all shadow-none border-0 rounded-3xl`}
             >
               <CardHeader
                 className={`${
@@ -1860,7 +1860,7 @@ export default function Dashboard() {
                 isDarkMode
                   ? "bg-[#262626] border-[#404040]"
                   : "bg-zinc-50 border-zinc-100"
-              } border-0 transition-all`}
+              } border-0 transition-all rounded-3xl`}
             >
               <CardHeader className="pb-4">
                 <CardTitle

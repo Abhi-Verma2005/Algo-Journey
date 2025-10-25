@@ -120,7 +120,7 @@ const DSAHeroBackground = () => {
           {arrayElements.map((element, index) => (
             <motion.div
               key={index}
-              className="w-6 h-6 md:w-10 md:h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-mono text-xs md:text-sm shadow-lg"
+              className="w-6 h-6 md:w-10 md:h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-mono text-xs md:text-sm shadow-none"
               initial={{ y: 0 }}
               animate={{ 
                 y: [0, -5, 0],
@@ -253,7 +253,7 @@ const DSAHeroBackground = () => {
           {['push()', 'pop()', 'peek()', 'isEmpty()'].map((operation, index) => (
             <motion.div
               key={index}
-              className="px-2 py-1 md:px-3 md:py-1 bg-blue-600 text-white text-xs font-mono rounded shadow-lg"
+              className="px-2 py-1 md:px-3 md:py-1 bg-blue-600 text-white text-xs font-mono rounded shadow-none"
               initial={{ x: -20, opacity: 0 }}
               animate={{ 
                 x: 0, 
@@ -290,7 +290,7 @@ const DSAHeroBackground = () => {
           ease: "easeInOut" 
         }}
       >
-        <div className="space-y-1 bg-white/80 p-2 md:p-3 rounded-lg shadow-lg max-w-xs">
+        <div className="space-y-1 bg-white/80 p-2 md:p-3 rounded-lg shadow-none max-w-xs">
           <div className="text-xs">while (left &lt; right) &#123;</div>
           <div className="ml-2 text-xs">mid = (left + right) / 2</div>
           <div className="ml-2 text-xs">if (arr[mid] == target)</div>

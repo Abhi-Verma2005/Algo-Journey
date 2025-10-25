@@ -459,7 +459,7 @@ const renderTagRatings = () => (
           </TabsTrigger>
         </TabsList>
         
-        <Card className={`shadow-sm ${
+        <Card className={`shadow-none ${
           isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-100'
         }`}>
           <CardContent className="p-6">
@@ -574,7 +574,7 @@ const renderTagRatings = () => (
           </TabsTrigger>
         </TabsList>
         
-        <Card className={`shadow-sm ${
+        <Card className={`shadow-none ${
           isDarkMode ? 'border-gray-600' : 'border-amber-100'
         }`}>
           <CardContent className="p-0">
@@ -701,7 +701,7 @@ const renderTagRatings = () => (
           </DialogTrigger>
         )}
         
-        <DialogContent className={`sm:max-w-2xl backdrop-blur-sm shadow-lg max-h-[90vh] flex flex-col ${
+        <DialogContent className={`sm:max-w-2xl backdrop-blur-sm shadow-none max-h-[90vh] flex flex-col ${
           isDarkMode 
             ? 'bg-gray-800/95 border-gray-600 text-gray-100' 
             : 'bg-white/95 border-gray-100'

@@ -495,7 +495,7 @@ const UnifiedGroupManagement = () => {
 
     return (
       <Card
-        className={`shadow-md border-0 w-full rounded-2xl ${
+        className={`shadow-none border-0 w-full rounded-2xl ${
           isDarkMode ? "bg-[#404040]" : "bg-white"
         }`}
       >
@@ -653,8 +653,8 @@ const UnifiedGroupManagement = () => {
             className={`py-2 px-4 rounded-md text-sm font-medium transition-colors ${
               activeTab === "create"
                 ? isDarkMode
-                  ? "bg-[#404040] text-indigo-400 shadow-sm"
-                  : "bg-white text-indigo-700 shadow-sm"
+                  ? "bg-[#404040] text-indigo-400 shadow-none"
+                  : "bg-white text-indigo-700 shadow-none"
                 : isDarkMode
                 ? "text-zinc-400 hover:text-zinc-200"
                 : "text-zinc-600 hover:text-zinc-800"
@@ -670,8 +670,8 @@ const UnifiedGroupManagement = () => {
             className={`py-2 px-4 rounded-md text-sm font-medium transition-colors ${
               activeTab === "update"
                 ? isDarkMode
-                  ? "bg-[#404040] text-indigo-400 shadow-sm"
-                  : "bg-white text-indigo-700 shadow-sm"
+                  ? "bg-[#404040] text-indigo-400 shadow-none"
+                  : "bg-white text-indigo-700 shadow-none"
                 : isDarkMode
                 ? "text-zinc-400 hover:text-zinc-200"
                 : "text-zinc-600 hover:text-zinc-800"
@@ -844,7 +844,7 @@ const UnifiedGroupManagement = () => {
               Current Group
             </h3>
             <div
-              className={`rounded-xl border-0 overflow-hidden shadow-sm ${
+              className={`rounded-xl border-0 overflow-hidden shadow-none ${
                 isDarkMode ? "bg-[#262626]" : "bg-zinc-50"
               }`}
             >
@@ -1008,7 +1008,7 @@ const UnifiedGroupManagement = () => {
               existingGroups.map((group) => (
                 <div
                   key={group.id}
-                  className={`rounded-xl border-0 overflow-hidden shadow-sm ${
+                  className={`rounded-xl border-0 overflow-hidden shadow-none ${
                     isDarkMode ? "bg-[#262626]" : "bg-zinc-50"
                   }`}
                 >

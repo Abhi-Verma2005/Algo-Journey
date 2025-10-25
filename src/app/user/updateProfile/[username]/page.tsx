@@ -166,7 +166,7 @@ const ProfilePage = () => {
     <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'dark bg-gray-900' : 'bg-gray-50'}`}>
       {ifCurrentUser && (
         <div className="container mx-auto py-8 max-w-2xl">
-          <Card className="w-full border mt-12 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg transition-colors duration-300">
+          <Card className="w-full border mt-12 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-none transition-colors duration-300">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">

@@ -42,7 +42,7 @@ const StatsCard = ({
   loading: boolean,
   color: string 
 }) => (
-  <Card className={`bg-white border-l-4 ${color} shadow-sm hover:shadow-md transition-all`}>
+  <Card className={`bg-white border-l-4 ${color} shadow-none hover:shadow-none transition-all`}>
     <CardHeader className="pb-2">
       <CardTitle className="text-sm font-medium text-gray-700 flex items-center gap-2">
         {icon}
@@ -88,7 +88,7 @@ const UserList = ({ loading, users }: { loading: boolean, users: User[] }) => {
   return (
     <div className="space-y-4">
       {users && users.length > 0 ? users.map((u) => (
-        <Card key={u.id} className="bg-white/90 shadow-sm hover:shadow-md transition-all border-gray-100">
+        <Card key={u.id} className="bg-white/90 shadow-none hover:shadow-none transition-all border-gray-100">
           <div className="p-4 flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
@@ -110,7 +110,7 @@ const UserList = ({ loading, users }: { loading: boolean, users: User[] }) => {
           </div>
         </Card>
       )) : (
-        <div className="text-center py-12 bg-white rounded-lg border border-gray-100 shadow-sm">
+        <div className="text-center py-12 bg-white rounded-lg border border-gray-100 shadow-none">
           <p className="text-gray-600">No users found</p>
         </div>
       )}
@@ -223,7 +223,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Main Content Tabs */}
-        <Card className="bg-white/90 shadow-sm border-gray-100">
+        <Card className="bg-white/90 shadow-none border-gray-100">
           <CardHeader className="border-b border-gray-100 pb-4">
             <div className="flex items-center justify-between">
               <div>

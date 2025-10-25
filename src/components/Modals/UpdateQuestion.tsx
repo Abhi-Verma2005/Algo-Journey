@@ -327,7 +327,7 @@ const UpdateQuestionComponent: React.FC<UpdateQuestionComponentProps> = ({
                 control={form.control}
                 name="inArena"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-none">
                     <div className="space-y-0.5">
                       <FormLabel>Arena Status</FormLabel>
                       <FormDescription>

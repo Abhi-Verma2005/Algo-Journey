@@ -13,7 +13,7 @@ const About = () => {
   return (
     <div className="max-w-5xl mx-auto px-6 py-16 mt-8">
       {/* Hero Section with Gradient Background */}
-      <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-blue-500 to-indigo-600 p-10 mb-16 shadow-xl">
+      <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-blue-500 to-indigo-600 p-10 mb-16 shadow-none">
         <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('/circuit-pattern.png')]"></div>
         <motion.div 
           className="relative z-10 text-center"
@@ -58,7 +58,7 @@ const About = () => {
       >
         {/* Feature 1 */}
         <motion.div 
-          className="p-8 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl shadow-lg border border-blue-200 hover:shadow-xl transition-shadow duration-300"
+          className="p-8 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl shadow-none border border-blue-200 hover:shadow-none transition-shadow duration-300"
           whileHover={{ y: -5 }}
           transition={{ duration: 0.3 }}
         >
@@ -73,7 +73,7 @@ const About = () => {
 
         {/* Feature 2 */}
         <motion.div 
-          className="p-8 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl shadow-lg border border-blue-200 hover:shadow-xl transition-shadow duration-300"
+          className="p-8 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl shadow-none border border-blue-200 hover:shadow-none transition-shadow duration-300"
           whileHover={{ y: -5 }}
           transition={{ duration: 0.3 }}
         >
@@ -88,7 +88,7 @@ const About = () => {
 
         {/* Feature 3 */}
         <motion.div 
-          className="p-8 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl shadow-lg border border-blue-200 hover:shadow-xl transition-shadow duration-300"
+          className="p-8 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl shadow-none border border-blue-200 hover:shadow-none transition-shadow duration-300"
           whileHover={{ y: -5 }}
           transition={{ duration: 0.3 }}
         >
@@ -103,7 +103,7 @@ const About = () => {
 
         {/* Feature 4 */}
         <motion.div 
-          className="p-8 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl shadow-lg border border-blue-200 hover:shadow-xl transition-shadow duration-300"
+          className="p-8 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl shadow-none border border-blue-200 hover:shadow-none transition-shadow duration-300"
           whileHover={{ y: -5 }}
           transition={{ duration: 0.3 }}
         >
@@ -126,9 +126,9 @@ const About = () => {
       >
         <h2 className="text-3xl font-bold text-center mb-10 text-gray-800">Our Tech Stack</h2>
         
-        <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl shadow-lg p-8 border border-gray-200">
+        <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl shadow-none p-8 border border-gray-200">
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="p-4 rounded-lg bg-white shadow-md">
+            <div className="p-4 rounded-lg bg-white shadow-none">
               <h3 className="text-xl font-semibold text-gray-800 mb-3 border-b pb-2">Frontend</h3>
               <ul className="space-y-2 text-gray-700">
                 <li className="flex items-center"><span className="w-3 h-3 rounded-full bg-blue-500 mr-2"></span> Next.js</li>
@@ -138,7 +138,7 @@ const About = () => {
               </ul>
             </div>
             
-            <div className="p-4 rounded-lg bg-white shadow-md">
+            <div className="p-4 rounded-lg bg-white shadow-none">
               <h3 className="text-xl font-semibold text-gray-800 mb-3 border-b pb-2">Backend</h3>
               <ul className="space-y-2 text-gray-700">
                 <li className="flex items-center"><span className="w-3 h-3 rounded-full bg-green-500 mr-2"></span> Node.js</li>
@@ -148,7 +148,7 @@ const About = () => {
               </ul>
             </div>
             
-            <div className="p-4 rounded-lg bg-white shadow-md">
+            <div className="p-4 rounded-lg bg-white shadow-none">
               <h3 className="text-xl font-semibold text-gray-800 mb-3 border-b pb-2">Services</h3>
               <ul className="space-y-2 text-gray-700">
                 <li className="flex items-center"><span className="w-3 h-3 rounded-full bg-purple-500 mr-2"></span> PostgreSQL (Neon.tech)</li>
@@ -171,7 +171,7 @@ const About = () => {
         <h2 className="text-3xl font-bold text-center mb-10 text-gray-800">Available Features</h2>
         
         <div className="grid md:grid-cols-2 gap-8">
-          <div className="p-6 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl shadow-lg border border-indigo-200">
+          <div className="p-6 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl shadow-none border border-indigo-200">
             <div className="flex items-center mb-4">
               <FaTrophy className="text-2xl text-indigo-600 mr-4" />
               <h3 className="text-xl font-semibold text-indigo-700">Leaderboards</h3>
@@ -179,7 +179,7 @@ const About = () => {
             <p className="text-gray-700">Compete with peers through our comprehensive leaderboards for project ratings and coding challenge rankings.</p>
           </div>
           
-          <div className="p-6 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl shadow-lg border border-indigo-200">
+          <div className="p-6 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl shadow-none border border-indigo-200">
             <div className="flex items-center mb-4">
               <Brain className="text-2xl text-indigo-600 mr-4" />
               <h3 className="text-xl font-semibold text-indigo-700">AI Chat</h3>
@@ -187,7 +187,7 @@ const About = () => {
             <p className="text-gray-700">Get hands-free coding assistance with our voice-activated AI chat feature for smoother workflow.</p>
           </div>
           
-          <div className="p-6 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl shadow-lg border border-indigo-200">
+          <div className="p-6 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl shadow-none border border-indigo-200">
             <div className="flex items-center mb-4">
               <FaRoad className="text-2xl text-indigo-600 mr-4" />
               <h3 className="text-xl font-semibold text-indigo-700">AI-driven Roadmaps</h3>
@@ -195,7 +195,7 @@ const About = () => {
             <p className="text-gray-700">Receive personalized learning paths and skill improvement suggestions based on your coding patterns.</p>
           </div>
           
-          <div className="p-6 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl shadow-lg border border-indigo-200">
+          <div className="p-6 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl shadow-none border border-indigo-200">
             <div className="flex items-center mb-4">
               <FaUserGraduate className="text-2xl text-indigo-600 mr-4" />
               <h3 className="text-xl font-semibold text-indigo-700">Collaboration Tools</h3>

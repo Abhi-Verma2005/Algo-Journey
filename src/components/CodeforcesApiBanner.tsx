@@ -51,7 +51,7 @@ const CodeforcesApiBanner: React.FC<CodeforcesApiBannerProps> = ({ onClose }) =>
           <div className="order-3 mt-2 shrink-0 w-full sm:order-2 sm:mt-0 sm:w-auto">
             <Link
               href={profileLink}
-              className={`flex items-center rounded-xl justify-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium text-white ${isDarkMode ? "bg-[#404040] hover:bg-[#434343]" : "bg-blue-600 hover:bg-blue-700"} transition-colors`}
+              className={`flex items-center rounded-xl justify-center px-4 py-2 border border-transparent shadow-none text-sm font-medium text-white ${isDarkMode ? "bg-[#404040] hover:bg-[#434343]" : "bg-blue-600 hover:bg-blue-700"} transition-colors`}
             >
               Add API Key
             </Link>

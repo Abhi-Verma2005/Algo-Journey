@@ -123,7 +123,7 @@ export default function Signup() {
               {/* Graph Network */}
               <g className="opacity-80">
                 {/* Nodes */}
-                <circle cx="150" cy="150" r="20" fill="#10B981" className="drop-shadow-lg"/>
+                <circle cx="150" cy="150" r="20" fill="#10B981" className="drop-shadow-none"/>
                 <circle cx="300" cy="100" r="20" fill="#059669"/>
                 <circle cx="450" cy="150" r="20" fill="#047857"/>
                 <circle cx="250" cy="250" r="20" fill="#065F46"/>

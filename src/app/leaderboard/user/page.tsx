@@ -32,18 +32,18 @@ const fetchLeaderboardData = async (endpoint: string, weekOffset: number = 0) =>
 };
 const getRankColor = (rank: number) => {
   switch(rank) {
-    case 1: return "bg-zinc-900 text-white";
-    case 2: return "bg-zinc-800 text-white";
-    case 3: return "bg-zinc-700 text-white";
-    default: return "bg-zinc-700 text-white";
+    case 1: return "bg-yellow-200 text-black";
+    case 2: return "bg-pink-300 text-black";
+    case 3: return "bg-blue-400 text-black";
+    default: return "bg-zinc-500 text-white";
   }
 };
 
 const getTrophyColor = (rank: number) => {
   switch(rank) {
-    case 1: return "text-zinc-200";
-    case 2: return "text-zinc-300";
-    case 3: return "text-zinc-400";
+    case 1: return "text-yellow-200";
+    case 2: return "text-pink-300";
+    case 3: return "text-blue-400";
     default: return "text-zinc-500";
   }
 };
@@ -99,7 +99,7 @@ const WeekSelector = ({
 const GroupRankings = ({ groups, isDarkMode }: { groups: Group[] | undefined; isDarkMode: boolean }) => {
   if (!groups || groups.length === 0) {
     return (
-      <div className={`text-center py-8 ${isDarkMode ? 'text-zinc-400 bg-[#262626]' : 'text-zinc-500 bg-white/90'} rounded-lg shadow-sm`}>
+      <div className={`text-center py-8 ${isDarkMode ? 'text-zinc-400 bg-[#262626]' : 'text-zinc-500 bg-white/90'} rounded-lg shadow-none`}>
         <Trophy className={`h-12 w-12 mx-auto mb-4 ${isDarkMode ? 'text-zinc-600' : 'text-zinc-400'}`} />
         No group rankings available
       </div>
@@ -111,7 +111,7 @@ const GroupRankings = ({ groups, isDarkMode }: { groups: Group[] | undefined; is
       {groups.map((group, index) => (
         <div 
           key={group.id} 
-          className={`flex items-center p-4 ${isDarkMode ? 'bg-[#262626] hover:bg-zinc-750' : 'bg-white/90 hover:shadow-md'} rounded-lg shadow-sm transition-all`}
+          className={`flex items-center p-4 ${isDarkMode ? 'bg-[#262626]' : 'bg-white/90'} rounded-xl transition-all`}
         >
           <div 
             className={`${getRankColor(index + 1)} w-10 h-10 flex items-center justify-center rounded-full mr-4 text-lg font-bold`}
@@ -144,7 +144,7 @@ const WeeklyRankings = ({ users, isDarkMode }: { users: User[] | undefined; isDa
   const { isAdmin } = useStore()
   if (!users || users.length === 0) {
     return (
-      <div className={`text-center py-8 ${isDarkMode ? 'text-zinc-400 bg-[#262626]' : 'text-zinc-500 bg-white/90'} rounded-lg shadow-sm`}>
+      <div className={`text-center py-8 ${isDarkMode ? 'text-zinc-400 bg-[#262626]' : 'text-zinc-500 bg-white/90'} rounded-x`}>
   <Trophy className={`h-12 w-12 mx-auto mb-4 ${isDarkMode ? 'text-zinc-600' : 'text-zinc-400'}`} />
         No rankings available for this week
       </div>
@@ -156,7 +156,7 @@ const WeeklyRankings = ({ users, isDarkMode }: { users: User[] | undefined; isDa
       {users.map((user, index) => (
         <div 
           key={user.id} 
-          className={`flex items-center p-4 ${isDarkMode ? 'bg-[#262626] hover:bg-zinc-750' : 'bg-white/90 hover:shadow-md'} rounded-lg shadow-sm transition-all`}
+          className={`flex items-center p-4 ${isDarkMode ? 'bg-[#262626]' : 'bg-white/90'} rounded-xl transition-all`}
         >
           <div 
             className={`${getRankColor(index + 1)} w-10 h-10 flex items-center justify-center rounded-full mr-4 text-lg font-bold`}
@@ -186,7 +186,7 @@ const WeeklyRankings = ({ users, isDarkMode }: { users: User[] | undefined; isDa
 };
 
 const LoadingState = ({ message, isDarkMode }: { message: string; isDarkMode: boolean }) => (
-  <div className={`flex items-center justify-center py-8 ${isDarkMode ? 'bg-[#262626]' : 'bg-white/90'} rounded-lg shadow-sm`}>
+  <div className={`flex items-center justify-center py-8 ${isDarkMode ? 'bg-[#262626]' : 'bg-white/90'} rounded-lg shadow-none`}>
     <div className={`animate-spin rounded-full h-8 w-8 border-b-2 ${isDarkMode ? 'border-indigo-400' : 'border-indigo-500'} mr-3`}></div>
     <span className={`${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>{message}</span>
   </div>
@@ -232,7 +232,7 @@ const LeaderboardPage = () => {
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-[#0A0A0A]' : 'bg-white'} transition-colors duration-300`}>
       <div className="container mx-auto px-4 py-8 md:py-30 pt-20 space-y-8">
-        <Card className={`rounded-3xl ${isDarkMode ? 'bg-[#191919]' : 'bg-zinc-100'}`}>
+        <Card className={`rounded-3xl shadow-none border-0 ${isDarkMode ? 'bg-[#191919]' : 'bg-zinc-100'}`}>
           <CardHeader>
             <div className="flex items-center gap-3">
               <Trophy className={`h-7 w-7 ${isDarkMode ? 'text-white' : 'text-black'}`} />
@@ -248,10 +248,10 @@ const LeaderboardPage = () => {
               onValueChange={setLeaderboardType}
               className="w-full"
             >
-              <TabsList className={`grid w-full grid-cols-2 mb-8 ${isDarkMode ? 'bg-[#262626]' : 'bg-zinc-100'}`}>
+              <TabsList className={`grid w-full grid-cols-2 mb-8 ${isDarkMode ? 'bg-[#262626]' : 'bg-zinc-300'}`}>
                 <TabsTrigger 
                   value="group" 
-                  className={`${isDarkMode ? 'data-[state=active]:bg-[#141414] data-[state=active]:text-white text-zinc-300' : 'data-[state=active]:bg-[#141414] data-[state=active]:text-white'}`}
+                  className={`${isDarkMode ? 'data-[state=active]:bg-[#141414] data-[state=active]:text-white text-zinc-300' : 'data-[state=active]:bg-[#141414] data-[state=active]:text-white text-black'}`}
                 >
                   <div className="flex items-center gap-2">
                     <Users className="h-4 w-4" />
@@ -260,7 +260,7 @@ const LeaderboardPage = () => {
                 </TabsTrigger>
                 <TabsTrigger 
                   value="weekly" 
-                  className={`${isDarkMode ? 'data-[state=active]:bg-[#141414] data-[state=active]:text-white text-zinc-300' : 'data-[state=active]:bg-[#141414] data-[state=active]:text-white'}`}
+                  className={`${isDarkMode ? 'data-[state=active]:bg-[#141414] data-[state=active]:text-white text-zinc-300' : 'data-[state=active]:bg-[#141414] data-[state=active]:text-white text-black'}`}
                 >
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4" />

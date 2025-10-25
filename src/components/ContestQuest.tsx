@@ -399,7 +399,7 @@ const ContestQuest: React.FC = () => {
         <>
           
           <div className="container mx-auto p-4 pt-20">
-            <Card className="max-w-2xl mx-auto border border-gray-100 hover:border-indigo-200 transition-all duration-300 hover:shadow-md">
+            <Card className="max-w-2xl mx-auto border border-gray-100 hover:border-indigo-200 transition-all duration-300 hover:shadow-none">
               <CardHeader>
                 <CardTitle className="text-2xl text-center text-indigo-800">Welcome to the Contest</CardTitle>
                 <CardDescription className="text-center text-gray-600">
@@ -458,7 +458,7 @@ const ContestQuest: React.FC = () => {
           )}
           
           {/* Contest Status Bar */}
-          <Card className="sticky top-16 z-10 bg-white border border-gray-100 shadow-sm">
+          <Card className="sticky top-16 z-10 bg-white border border-gray-100 shadow-none">
             <CardContent className="py-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="flex items-center space-x-4">
@@ -523,7 +523,7 @@ const ContestQuest: React.FC = () => {
               return (
                 <Card 
                   key={q.id}
-                  className={`transition-all duration-300 hover:shadow-md ${
+                  className={`transition-all duration-300 hover:shadow-none ${
                     isVerified || q.question.isSolved
                       ? 'bg-green-50/50 border-green-200' 
                       : 'bg-white border-gray-100 hover:border-indigo-200'

@@ -468,7 +468,7 @@ const clientConfig: ClientSideSearchConfig<Question> = {
 
         {/* Quick Stats */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <Card className="bg-white border-l-4 border-l-blue-400 shadow-sm hover:shadow-md transition-all">
+          <Card className="bg-white border-l-4 border-l-blue-400 shadow-none hover:shadow-none transition-all">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-gray-700 flex items-center gap-2">
                 <Target className="h-4 w-4 text-blue-500" />
@@ -481,7 +481,7 @@ const clientConfig: ClientSideSearchConfig<Question> = {
             </CardContent>
           </Card>
 
-          <Card className="bg-white border-l-4 border-l-teal-400 shadow-sm hover:shadow-md transition-all">
+          <Card className="bg-white border-l-4 border-l-teal-400 shadow-none hover:shadow-none transition-all">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-gray-700 flex items-center gap-2">
                 <Code className="h-4 w-4 text-teal-500" />
@@ -496,7 +496,7 @@ const clientConfig: ClientSideSearchConfig<Question> = {
             </CardContent>
           </Card>
 
-          <Card className="bg-white border-l-4 border-l-amber-400 shadow-sm hover:shadow-md transition-all">
+          <Card className="bg-white border-l-4 border-l-amber-400 shadow-none hover:shadow-none transition-all">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-gray-700 flex items-center gap-2">
                 <Layers className="h-4 w-4 text-amber-500" />
@@ -516,7 +516,7 @@ const clientConfig: ClientSideSearchConfig<Question> = {
           {/* Sidebar */}
           <div className="md:col-span-4 space-y-6">
             {/* Test Configuration */}
-            <Card className="bg-white shadow-sm hover:shadow-md transition-all">
+            <Card className="bg-white shadow-none hover:shadow-none transition-all">
               <CardHeader className="border-b border-gray-100 pb-4">
                 <CardTitle className="text-xl font-bold text-gray-800 flex items-center gap-2">
                   <Settings className="h-5 w-5 text-indigo-500" />
@@ -580,7 +580,7 @@ const clientConfig: ClientSideSearchConfig<Question> = {
             </Card>
 
             {/* Selected Questions */}
-            <Card className="bg-white shadow-sm hover:shadow-md transition-all">
+            <Card className="bg-white shadow-none hover:shadow-none transition-all">
               <CardHeader className="border-b border-gray-100 pb-4">
                 <CardTitle className="text-xl font-bold text-gray-800 flex items-center gap-2">
                   <Layers className="h-5 w-5 text-indigo-500" />
@@ -625,7 +625,7 @@ const clientConfig: ClientSideSearchConfig<Question> = {
 
           {/* Main Content */}
           <div className="md:col-span-8">
-            <Card className="bg-white shadow-sm hover:shadow-md transition-all">
+            <Card className="bg-white shadow-none hover:shadow-none transition-all">
               <CardHeader className="border-b border-gray-100 pb-4">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-xl font-bold text-gray-800 flex items-center gap-2">

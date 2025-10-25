@@ -2,7 +2,7 @@ import React from 'react';
 
 // Stats Card Skeleton
 export const StatsCardSkeleton = () => (
-  <div className="bg-white border-l-4 border-l-gray-200 shadow-sm p-4 rounded-lg animate-pulse">
+  <div className="bg-white border-l-4 border-l-gray-200 shadow-none p-4 rounded-lg animate-pulse">
     <div className="flex items-center gap-2 mb-2">
       <div className="h-4 w-4 bg-gray-200 rounded-full"></div>
       <div className="h-4 w-24 bg-gray-200 rounded"></div>
@@ -14,7 +14,7 @@ export const StatsCardSkeleton = () => (
 
 // LeetCode Card Skeleton
 export const LeetCodeSkeleton = () => (
-  <div className="bg-white/90 shadow-sm rounded-lg border border-gray-100 animate-pulse">
+  <div className="bg-white/90 shadow-none rounded-lg border border-gray-100 animate-pulse">
     <div className="border-b border-gray-100 p-4">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
@@ -61,7 +61,7 @@ export const LeetCodeSkeleton = () => (
 
 // Codeforces Card Skeleton
 export const CodeforcesSkeleton = () => (
-  <div className="bg-white/90 shadow-sm rounded-lg border border-gray-100 animate-pulse">
+  <div className="bg-white/90 shadow-none rounded-lg border border-gray-100 animate-pulse">
     <div className="border-b border-gray-100 p-4">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
@@ -97,7 +97,7 @@ export const CodeforcesSkeleton = () => (
 
 // Contests Skeleton
 export const ContestsSkeleton = () => (
-  <div className="bg-white/90 shadow-sm rounded-lg border border-gray-100 animate-pulse">
+  <div className="bg-white/90 shadow-none rounded-lg border border-gray-100 animate-pulse">
     <div className="border-b border-gray-100 p-4">
       <div className="flex items-center justify-between mb-2">
         <div>
@@ -137,7 +137,7 @@ export const ContestsSkeleton = () => (
 
 // Team Members Skeleton
 export const TeamMembersSkeleton = () => (
-  <div className="bg-white/90 shadow-sm rounded-lg border border-gray-100 animate-pulse">
+  <div className="bg-white/90 shadow-none rounded-lg border border-gray-100 animate-pulse">
     <div className="border-b border-gray-100 p-4">
       <div className="flex items-center justify-between mb-2">
         <div>
@@ -181,7 +181,7 @@ export const TeamMembersSkeleton = () => (
 
 // Join Team Skeleton
 export const JoinTeamSkeleton = () => (
-  <div className="bg-white/90 shadow-sm rounded-lg border border-gray-100 animate-pulse">
+  <div className="bg-white/90 shadow-none rounded-lg border border-gray-100 animate-pulse">
     <div className="p-4">
       <div className="h-6 w-36 bg-gray-200 rounded mb-2"></div>
       <div className="h-4 w-48 bg-gray-100 rounded"></div>

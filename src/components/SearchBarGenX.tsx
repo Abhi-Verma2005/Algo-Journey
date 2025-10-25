@@ -298,7 +298,7 @@ function SearchBar<T>({
       </div>
       
       {(isFocused || loading) && query.length >= (config.minQueryLength || 1) && (
-        <div className={`absolute z-50 mt-1 w-full bg-white rounded-md border border-gray-100 shadow-lg overflow-hidden divide-y divide-gray-100 ${resultsClassName}`}>
+        <div className={`absolute z-50 mt-1 w-full bg-white rounded-md border border-gray-100 shadow-none overflow-hidden divide-y divide-gray-100 ${resultsClassName}`}>
           {renderResults()}
         </div>
       )}

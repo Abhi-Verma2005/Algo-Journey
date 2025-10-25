@@ -185,7 +185,7 @@ const TopicGrid: React.FC = () => {
   return (
     <div
       className={`min-h-screen transition-colors duration-300 ${
-        isDarkMode ? "bg-[#0A0A0A]" : "bg-gray-50"
+        isDarkMode ? "bg-[#0A0A0A]" : "bg-white"
       }`}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-28 space-t-8">
@@ -197,8 +197,8 @@ const TopicGrid: React.FC = () => {
         )}
 
         <Card
-          className={`p-3 rounded-t-4xl rounded-b-none ${
-            isDarkMode ? "bg-[#181818]" : ""
+          className={`p-3 rounded-t-4xl rounded-b-none border-0 ${
+            isDarkMode ? "bg-[#181818]" : "bg-zinc-100"
           }`}
         >
           <CardHeader>
@@ -317,7 +317,7 @@ const TopicGrid: React.FC = () => {
                           lightBg: isDarkMode ? "bg-[#111111]" : "bg-zinc-100",
                         },
                         concepts: {
-                          bg: "bg-zinc-800",
+                          bg: isDarkMode ? "bg-green-400" :"bg-green-600",
                           border: "border-zinc-700/50",
                           text: isDarkMode ? "text-zinc-200" : "text-zinc-800",
                           lightBg: isDarkMode ? "bg-[#111111]" : "bg-zinc-100",
@@ -343,6 +343,7 @@ const TopicGrid: React.FC = () => {
                     transform
                     transition-all 
                     duration-300
+                    shadow-none
                     border-0
                     rounded-2xl
                     overflow-hidden ${
@@ -350,8 +351,8 @@ const TopicGrid: React.FC = () => {
                     }
                     ${
                       isDarkMode
-                        ? "bg-[#262626] hover:border-gray-600"
-                        : "bg-white border-gray-200"
+                        ? "bg-[#262626]"
+                        : "bg-zinc-200"
                     }
                     ${
                       loading && currentTopic === topic
@@ -366,10 +367,10 @@ const TopicGrid: React.FC = () => {
                           <CardHeader className="pb-2">
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-3">
-                                <div className={`p-1 rounded ${isDarkMode ? 'bg-[#111111]' : 'bg-zinc-100'} text-zinc-300`}>{icon}</div>
+                                <div className={`p-1 rounded ${isDarkMode ? 'bg-[#111111] text-white/50' : 'bg-zinc-100 text-black/50'} `}>{icon}</div>
                                 <h3 className={`text-lg font-semibold ${adaptiveColors.text}`}>{topic}</h3>
                               </div>
-                              <div className={`${adaptiveColors.lightBg} px-3 py-0.5 text-xs text-zinc-300 rounded-full`}>
+                              <div className={`${adaptiveColors.lightBg} ${isDarkMode ? 'text-green-400' : 'text-green-500 font-bold'} px-3 py-0.5 text-xs rounded-full`}>
                                 {topicData.solved || 0}/{topicData.total || 0}
                               </div>
                             </div>

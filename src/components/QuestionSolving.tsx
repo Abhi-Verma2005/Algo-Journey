@@ -299,7 +299,7 @@ const QuestionSolving = () => {
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} transition-colors duration-300`}>
       <div className={`container mx-auto p-4 mt-16 max-w-6xl ${isDarkMode ? 'dark' : ''}`}>
-  <Card className={`mb-6 ${isDarkMode ? 'bg-gray-800/90 border-gray-700' : 'bg-white/90 border-zinc-100'} shadow-sm`}>
+  <Card className={`mb-6 ${isDarkMode ? 'bg-gray-800/90 border-gray-700' : 'bg-white/90 border-zinc-100'} shadow-none`}>
           <CardContent className="py-6">
             <div className="flex justify-between items-center mb-4">
               <Skeleton className={`h-8 w-48 ${isDarkMode ? 'bg-gray-700' : ''}`} />
@@ -364,14 +364,14 @@ const QuestionSolving = () => {
       </div>
     )}
     
-    <Card className={`mb-6 ${showApiBanner ? '' : 'mt-16'} ${isDarkMode ? 'bg-gray-800/90 border-gray-700' : 'bg-indigo-50/90 border-indigo-100'} shadow-sm`}>
+    <Card className={`mb-6 ${showApiBanner ? '' : 'mt-16'} ${isDarkMode ? 'bg-gray-800/90 border-gray-700' : 'bg-indigo-50/90 border-indigo-100'} shadow-none`}>
       <CardHeader className="py-6">
         <div className="flex justify-between items-center">
           <div>
             <CardTitle className={`text-2xl font-bold ${isDarkMode ? 'text-zinc-200' : 'text-zinc-900'}`}>Practice Questions</CardTitle>
             <p className={`text-sm ${isDarkMode ? 'text-zinc-400' : 'text-zinc-700'} mt-1`}>Master algorithms through consistent practice</p>
           </div>
-          <div className={`${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-zinc-100'} p-4 rounded-lg shadow-sm border`}>
+          <div className={`${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-zinc-100'} p-4 rounded-lg shadow-none border`}>
             <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-1`}>Total Score</p>
             <p className={`text-3xl font-bold ${isDarkMode ? 'text-zinc-200' : 'text-zinc-900'}`}>{score}</p>
           </div>
@@ -447,7 +447,7 @@ const QuestionSolving = () => {
     </Card>
 
     {filteredQuestions.length === 0 ? (
-      <div className={`text-center py-12 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'} rounded-lg border shadow-sm`}>
+      <div className={`text-center py-12 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'} rounded-lg border shadow-none`}>
         <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>No questions match your current filters.</p>
         <Button 
           variant="outline"
@@ -500,7 +500,7 @@ const QuestionSolving = () => {
           return (
             <Card 
               key={q.id}
-              className={`transition-all duration-300 hover:shadow-md ${
+              className={`transition-all duration-300 hover:shadow-none ${
                 q.isSolved || solvedProblems.has(q.id) 
                     ? `${isDarkMode ? 'bg-zinc-900/20 border-zinc-700/50' : 'bg-zinc-100/50 border-zinc-200'}`
                   : `${isDarkMode ? 'bg-gray-800 border-gray-700 hover:border-indigo-500/50' : 'bg-white border-gray-100 hover:border-indigo-200'}`

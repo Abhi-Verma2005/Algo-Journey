@@ -225,7 +225,7 @@ const ArenaLeaderboardPage = () => {
   if (error) {
     return (
       <div className="container mx-auto p-8 pt-20 space-y-8">
-        <Card className="bg-white shadow-sm border-gray-100">
+        <Card className="bg-white shadow-none border-gray-100">
           <CardContent className="text-center py-12">
             <X className="h-12 w-12 mx-auto mb-3 text-rose-300" />
             <h3 className="text-xl font-medium text-gray-700 mb-1">Error loading arena leaderboard</h3>
@@ -249,7 +249,7 @@ const ArenaLeaderboardPage = () => {
       </div>
 
       {/* Selection Form Section */}
-      <Card className="bg-white shadow-sm border-gray-100 mb-8">
+      <Card className="bg-white shadow-none border-gray-100 mb-8">
         <CardHeader className="border-b border-gray-100 pb-4">
           <CardTitle className="flex items-center gap-2 text-xl">
             <Filter className="h-5 w-5 text-indigo-500" />
@@ -411,7 +411,7 @@ const ArenaLeaderboardPage = () => {
       </Card>
 
       {!hasAppliedFilters ? (
-        <Card className="bg-white shadow-sm border-gray-100">
+        <Card className="bg-white shadow-none border-gray-100">
           <CardContent className="text-center py-16">
             <Filter className="h-12 w-12 mx-auto mb-3 text-indigo-300" />
             <h3 className="text-xl font-medium text-gray-700 mb-2">Please Select Filters</h3>
@@ -434,7 +434,7 @@ const ArenaLeaderboardPage = () => {
       
       
       data && data.length > 0 ? (
-        <Card className="bg-white shadow-sm hover:shadow-md transition-all border-gray-100">
+        <Card className="bg-white shadow-none hover:shadow-none transition-all border-gray-100">
           <CardHeader className="border-b border-gray-100 pb-4">
             <CardTitle className="flex items-center gap-2 text-xl">
               <Trophy className="h-5 w-5 text-amber-500" />
@@ -535,7 +535,7 @@ const ArenaLeaderboardPage = () => {
           </CardContent>
         </Card>
       ) : (
-        <Card className="bg-white shadow-sm border-gray-100">
+        <Card className="bg-white shadow-none border-gray-100">
           <CardContent className="text-center py-16">
             <Users className="h-12 w-12 mx-auto mb-3 text-gray-300" />
             <h3 className="text-xl font-medium text-gray-700 mb-2">No Data Found</h3>

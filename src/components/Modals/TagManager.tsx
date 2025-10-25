@@ -97,7 +97,7 @@ const TagManager = () => {
 
   return (
     <div className="container mx-auto p-8 pt-20 space-y-8">
-      <Card className="bg-white/90 shadow-sm hover:shadow-md transition-all border-gray-100">
+      <Card className="bg-white/90 shadow-none hover:shadow-none transition-all border-gray-100">
         <CardHeader className="border-b border-gray-100 pb-4">
           <div className="flex items-center justify-between">
             <div>
@@ -163,7 +163,7 @@ const TagManager = () => {
         </CardContent>
         <CardFooter className="border-t border-gray-100 pt-4 flex justify-end">
           <Button
-            className="bg-indigo-500 hover:bg-indigo-600 text-white shadow-sm flex items-center"
+            className="bg-indigo-500 hover:bg-indigo-600 text-white shadow-none flex items-center"
             onClick={() => setShowConfirmation(true)}
             disabled={isLoading || isSaving}
           >

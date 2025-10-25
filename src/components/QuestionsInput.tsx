@@ -236,7 +236,7 @@ export default function QuestionForm() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           {/* Left Panel - Question Editor */}
           <div className="md:col-span-5 lg:col-span-4">
-            <Card className="sticky top-8 bg-white shadow-sm">
+            <Card className="sticky top-8 bg-white shadow-none">
               <CardHeader className="border-b pb-4">
                 <CardTitle className="text-xl font-bold text-gray-800 flex items-center gap-2">
                   <Target className="h-5 w-5 text-indigo-500" />
@@ -378,7 +378,7 @@ export default function QuestionForm() {
           
           {/* Right Panel - Questions List */}
           <div className="md:col-span-7 lg:col-span-8 space-y-6">
-            <Card className="bg-white shadow-sm">
+            <Card className="bg-white shadow-none">
               <CardHeader className="border-b pb-4">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-xl font-bold text-gray-800">
@@ -422,7 +422,7 @@ export default function QuestionForm() {
                         key={index} 
                         className={`border ${
                           editingIndex === index ? 'border-indigo-300 ring-1 ring-indigo-300' : 'border-gray-200'
-                        } hover:shadow-md transition-all`}
+                        } hover:shadow-none transition-all`}
                       >
                         <CardContent className="p-4">
                           <div className="flex items-start justify-between">

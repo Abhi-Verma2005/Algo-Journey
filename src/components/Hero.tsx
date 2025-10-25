@@ -143,7 +143,7 @@ const ModernLandingPage = () => {
                   setCreds({ username: '', password: '' })
                   router.push('/auth/signin')
                 }}
-                className="group bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-4 rounded-2xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                className="group bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-4 rounded-2xl text-lg font-semibold shadow-none hover:shadow-none transition-all duration-300"
                 size="lg"
               >
                 Start Learning Free
@@ -223,8 +223,8 @@ const ModernLandingPage = () => {
                   key={feature.id}
                   className={`p-6 rounded-2xl cursor-pointer transition-all duration-300 ${
                     activeFeature === index 
-                      ? 'bg-white shadow-lg border-l-4 border-blue-600' 
-                      : 'bg-white/50 hover:bg-white hover:shadow-md'
+                      ? 'bg-white shadow-none border-l-4 border-blue-600' 
+                      : 'bg-white/50 hover:bg-white hover:shadow-none'
                   }`}
                   onClick={() => setActiveFeature(index)}
                   whileHover={{ x: 4 }}
@@ -257,7 +257,7 @@ const ModernLandingPage = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <div className="relative bg-white rounded-3xl shadow-2xl overflow-hidden">
+              <div className="relative bg-white rounded-3xl shadow-none overflow-hidden">
                 <Image
                   src={features[activeFeature].image}
                   alt={features[activeFeature].title}
@@ -293,7 +293,7 @@ const ModernLandingPage = () => {
             {testimonials.map((testimonial, index) => (
               <motion.div
                 key={index}
-                className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-lg transition-all duration-300"
+                className="bg-white p-8 rounded-3xl shadow-none border border-slate-100 hover:shadow-none transition-all duration-300"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -342,7 +342,7 @@ const ModernLandingPage = () => {
               Explore AlgoJourney with our demo account - no registration required
             </p>
 
-            <div className="bg-white rounded-3xl p-8 shadow-lg max-w-lg mx-auto">
+            <div className="bg-white rounded-3xl p-8 shadow-none max-w-lg mx-auto">
               <div className="space-y-4">
                 <div className="flex justify-between items-center p-4 bg-slate-50 rounded-xl">
                   <span className="font-medium text-slate-700">Username:</span>
@@ -396,7 +396,7 @@ const ModernLandingPage = () => {
               {!session && (
                 <Button 
                   onClick={() => router.push('/auth/signin')}
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-4 rounded-2xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-4 rounded-2xl text-lg font-semibold shadow-none hover:shadow-none transition-all duration-300"
                   size="lg"
                 >
                   Start Free Today

@@ -1,20 +1,25 @@
-import prisma from '@/lib/prisma';
-import { getServerSession } from 'next-auth';
-import { NextResponse } from 'next/server';
+import prisma from "@/lib/prisma";
+import { getServerSession } from "next-auth";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
     const session = await getServerSession();
     if (!session?.user?.email) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const userEmail = session.user.email;
     const body = await request.json();
     const { topics, difficulties } = body;
-    if (!topics || !Array.isArray(topics) || !difficulties || !Array.isArray(difficulties)) {
+    if (
+      !topics ||
+      !Array.isArray(topics) ||
+      !difficulties ||
+      !Array.isArray(difficulties)
+    ) {
       return NextResponse.json(
-        { error: 'Invalid input: topics and difficulties must be arrays' },
+        { error: "Invalid input: topics and difficulties must be arrays" },
         { status: 400 }
       );
     }
@@ -24,55 +29,58 @@ export async function POST(request: Request) {
       EASY: 2,
       MEDIUM: 3,
       HARD: 4,
-      VERYHARD: 5
+      VERYHARD: 5,
     };
 
     const user = await prisma.user.findUnique({
       where: {
         email: userEmail,
-      }
+      },
     });
-
-    
 
     const questions = await prisma.question.findMany({
       where: {
         inArena: true,
         AND: [
           {
-            questionTags: {
+            QuestionToQuestionTag: {
               some: {
-                name: {
-                  in: topics
-                }
-              }
-            }
+                QuestionTag: {
+                  name: {
+                    in: topics,
+                  },
+                },
+              },
+            },
           },
           {
             difficulty: {
-              in: difficulties
-            }
-          }
-        ]
+              in: difficulties,
+            },
+          },
+        ],
       },
       include: {
-        questionTags: true,
-      }
+        QuestionToQuestionTag: {
+          include: {
+            QuestionTag: true,
+          },
+        },
+      },
     });
 
     const sortedQuestions = questions.sort((a, b) => {
-      
       const diffA = difficultyOrder[a.difficulty];
       const diffB = difficultyOrder[b.difficulty];
-      
+
       if (diffA !== diffB) {
         return diffA - diffB;
       }
-      
+
       if (!a.arenaAddedAt && !b.arenaAddedAt) return 0;
       if (!a.arenaAddedAt) return 1;
       if (!b.arenaAddedAt) return -1;
-      
+
       return a.arenaAddedAt.getTime() - b.arenaAddedAt.getTime();
     });
 
@@ -80,45 +88,55 @@ export async function POST(request: Request) {
       where: {
         userId: user?.id,
         questionId: {
-          in: sortedQuestions.map(q => q.id)
-        }
-      },
-      select: {
-        questionId: true
-      }
-    });
-
-    
-
-    const acceptedSubmissions = await prisma.submission.findMany({
-      where: {
-        userId: user?.id,
-        status: 'ACCEPTED',
+          in: sortedQuestions.map((q) => q.id),
+        },
       },
       select: {
         questionId: true,
       },
     });
 
-    const solvedQuestionIds = new Set(acceptedSubmissions.map(sub => sub.questionId));
+    const acceptedSubmissions = await prisma.submission.findMany({
+      where: {
+        userId: user?.id,
+        status: "ACCEPTED",
+      },
+      select: {
+        questionId: true,
+      },
+    });
 
-    const bookmarkedQuestionIds = new Set(bookmarks.map(bookmark => bookmark.questionId));
+    const solvedQuestionIds = new Set(
+      acceptedSubmissions.map((sub) => sub.questionId)
+    );
 
-    const questionsWithSolvedStatus = sortedQuestions.map((question, index) => ({
-      ...question,
-      index: index,
-      isSolved: solvedQuestionIds.has(question.id),
-      isBookmarked: bookmarkedQuestionIds.has(question.id) // Add this line
-    }));
+    const bookmarkedQuestionIds = new Set(
+      bookmarks.map((bookmark) => bookmark.questionId)
+    );
 
-    return NextResponse.json({ 
-      questionsWithSolvedStatus, 
-      individualPoints: user?.individualPoints 
-    }, { status: 200 });
-  } catch (error) {
-    console.error('Error fetching questions:', error);
+    const questionsWithSolvedStatus = sortedQuestions.map(
+      (question, index) => ({
+        ...question,
+        index: index,
+        isSolved: solvedQuestionIds.has(question.id),
+        isBookmarked: bookmarkedQuestionIds.has(question.id),
+        questionTags: question.QuestionToQuestionTag.map(
+          (junction) => junction.QuestionTag
+        ),
+      })
+    );
+
     return NextResponse.json(
-      { error: 'Failed to fetch questions' },
+      {
+        questionsWithSolvedStatus,
+        individualPoints: user?.individualPoints,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error fetching questions:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch questions" },
       { status: 500 }
     );
   }

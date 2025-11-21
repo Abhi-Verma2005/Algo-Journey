@@ -357,15 +357,15 @@ const QuestionSolving = () => {
         <div className="container mx-auto px-4 py-8 md:py-30 pt-20 space-y-8">
           <Card
             className={`mb-6 ${
-              isDarkMode
-                ? "bg-[#262626]"
-                : "bg-white"
+              isDarkMode ? "bg-[#262626]" : "bg-white"
             } shadow-none border-none`}
           >
             <CardContent className="py-6 border-none">
               <div className="flex justify-between items-center mb-4">
                 <Skeleton
-                  className={`h-8 border-none w-48 ${isDarkMode ? "bg-[#262626]" : ""}`}
+                  className={`h-8 border-none w-48 ${
+                    isDarkMode ? "bg-[#262626]" : ""
+                  }`}
                 />
                 <div className="text-right">
                   <Skeleton
@@ -472,9 +472,7 @@ const QuestionSolving = () => {
 
         <Card
           className={`mb-6 ${showApiBanner ? "" : "mt-16"} ${
-            isDarkMode
-              ? "bg-[#262626]"
-              : "bg-gray-100"
+            isDarkMode ? "bg-[#262626]" : "bg-gray-100"
           } shadow-none`}
         >
           <CardHeader className="py-6">
@@ -551,9 +549,7 @@ const QuestionSolving = () => {
                       <SelectValue placeholder="Select Difficulty" />
                     </SelectTrigger>
                     <SelectContent
-                      className={
-                        isDarkMode ? "bg-[#484848] border-none" : ""
-                      }
+                      className={isDarkMode ? "bg-[#484848] border-none" : ""}
                     >
                       {DIFFICULTIES.map((difficulty) => (
                         <SelectItem
@@ -702,11 +698,18 @@ const QuestionSolving = () => {
                     : "bg-zinc-100 text-zinc-800 border-zinc-200";
               }
 
-              // Get primary tag (first tag, or Two Pointers if it exists)
-              //@ts-expect-error: not needed here.
-              const primaryTag = topics[1];
+              // Extract primary tag from URL - should be the first topic (topics[0])
+              const rawPrimaryTag = topics?.[0];
+              const primaryTag = rawPrimaryTag
+                ? decodeURIComponent(rawPrimaryTag)
+                : null;
 
-              console.log(primaryTag);
+              // Validate that the primary tag exists in available tags
+              const isValidPrimaryTag =
+                primaryTag &&
+                localTags.some(
+                  (tag) => tag.toLowerCase() === primaryTag.toLowerCase()
+                );
 
               return (
                 <Card
@@ -787,18 +790,9 @@ const QuestionSolving = () => {
                                 ? "bg-indigo-900/50 border-indigo-500/50 text-indigo-300"
                                 : "bg-indigo-50 border-indigo-200 text-indigo-700"
                               : ""
-                          } ${
-                            primaryTag && tag.name === primaryTag
-                              ? isDarkMode
-                                ? "bg-blue-900/50 border-blue-500/50 text-blue-300"
-                                : "bg-blue-50 border-blue-200 text-blue-700"
-                              : ""
                           }`}
                         >
                           {tag.name}
-                          {primaryTag && tag.name === primaryTag && (
-                            <span className="ml-1 text-xs">(Primary)</span>
-                          )}
                         </Badge>
                       ))}
                     </div>
@@ -834,7 +828,9 @@ const QuestionSolving = () => {
                         <HintsComponent
                           questionId={q.id}
                           questionSlug={q.slug}
-                          primaryTagName={primaryTag}
+                          primaryTagName={
+                            isValidPrimaryTag ? primaryTag : undefined
+                          }
                         />
                         <Button
                           variant="outline"

@@ -19,16 +19,12 @@ export async function GET() {
 
     const questionsWithProgress = await prisma.questionTag.findMany({
       include: {
-        QuestionToQuestionTag: {
+        questions: {
           include: {
-            questions: {
-              include: {
-                submissions: {
-                  where: {
-                    userId: user.id,
-                    status: "ACCEPTED",
-                  },
-                },
+            submissions: {
+              where: {
+                userId: user.id,
+                status: "ACCEPTED",
               },
             },
           },
@@ -37,10 +33,10 @@ export async function GET() {
     });
 
     const topicProgress = questionsWithProgress.reduce((acc, tag) => {
-      // Get questions from the junction table that are in arena
-      const arenaQuestions = tag.QuestionToQuestionTag.map(
-        (junction) => junction.questions
-      ).filter((question) => question.inArena);
+      // Get questions that are in arena
+      const arenaQuestions = tag.questions.filter(
+        (question) => question.inArena
+      );
 
       const total = arenaQuestions.length;
       const solved = arenaQuestions.filter(

@@ -43,12 +43,10 @@ export async function POST(request: Request) {
         inArena: true,
         AND: [
           {
-            QuestionToQuestionTag: {
+            questionTags: {
               some: {
-                QuestionTag: {
-                  name: {
-                    in: topics,
-                  },
+                name: {
+                  in: topics,
                 },
               },
             },
@@ -61,11 +59,7 @@ export async function POST(request: Request) {
         ],
       },
       include: {
-        QuestionToQuestionTag: {
-          include: {
-            QuestionTag: true,
-          },
-        },
+        questionTags: true,
       },
     });
 
@@ -120,9 +114,7 @@ export async function POST(request: Request) {
         index: index,
         isSolved: solvedQuestionIds.has(question.id),
         isBookmarked: bookmarkedQuestionIds.has(question.id),
-        questionTags: question.QuestionToQuestionTag.map(
-          (junction) => junction.QuestionTag
-        ),
+        questionTags: question.questionTags,
       })
     );
 

@@ -10,11 +10,7 @@ export async function GET(request: NextRequest) {
     const question = await prisma.question.findUnique({
       where: { id: questionId },
       include: {
-        QuestionToQuestionTag: {
-          include: {
-            QuestionTag: true,
-          },
-        },
+        questionTags: true,
       },
     });
 
@@ -25,10 +21,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Transform the junction table data to return the tags
-    const questionTags = question.QuestionToQuestionTag.map(
-      (junction) => junction.QuestionTag
-    );
+    // Return the tags directly
+    const questionTags = question.questionTags;
 
     return NextResponse.json(questionTags);
   } catch (error) {

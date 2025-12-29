@@ -38,7 +38,7 @@ import { fetchLatestSubmissionsCodeForces, fetchLatestSubmissionsLeetCode } from
 const signupSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
   email: z.string().email("Invalid email").refine(
-    (email) => email.endsWith("@nst.rishihood.edu.in") || email.endsWith("@newtonschool.co") || email.endsWith("@sst.scaler.com") || email.endsWith("@adypu.edu.in") || email.endsWith("@gla.ac.in") || email.endsWith("@oriental.ac.in") || email.endsWith("@maimt.com") || email.endsWith("@csds.rishihood.edu.in"),
+    (email) => email.endsWith("@nst.rishihood.edu.in") || email.endsWith("@newtonschool.co") || email.endsWith("@sst.scaler.com") || email.endsWith("@adypu.edu.in") || email.endsWith("@gla.ac.in") || email.endsWith("@oriental.ac.in") || email.endsWith("@maimt.com") || email.endsWith("@csds.rishihood.edu.in") || email.endsWith("@svyasa-sas.edu.in"),
     "Must use college email"
   ),
   

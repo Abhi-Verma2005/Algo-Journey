@@ -37,15 +37,17 @@ import { AnimatedGradientText } from "./ui/animated-gradient-text";
 const Navbar = () => {
   const router = useRouter();
   const { status } = useSession();
-  const { isAdmin, setIsAdmin, setDarkMode, enrollmentNum, setEnrollmentNum } = useStore();
+  const { isAdmin, setIsAdmin, setDarkMode, enrollmentNum, setEnrollmentNum } =
+    useStore();
   const { username, setUsername } = useMessageStore();
   const { setTags } = useTagStore();
   const { setCreds } = useDemo();
   const { isDarkMode } = useStore();
 
   const is26Enrollment = Boolean(
-    enrollmentNum && enrollmentNum.toString().trim().startsWith("26")
+    enrollmentNum && enrollmentNum.toString().trim().startsWith("26"),
   );
+  const canAccessDoubtSession = is26Enrollment || isAdmin;
 
   useEffect(() => {
     const checkIfAdmin = async () => {
@@ -132,9 +134,7 @@ const Navbar = () => {
   return (
     <nav
       className={`fixed top-0 left-0 w-full h-16 z-50 flex items-center justify-between px-4 md:px-8 transition-colors duration-300 ${
-        isDarkMode
-          ? "bg-[#0A0A0A]"
-          : "bg-white border-white"
+        isDarkMode ? "bg-[#0A0A0A]" : "bg-white border-white"
       }`}
     >
       <div className="flex items-center space-x-4">
@@ -170,7 +170,7 @@ const Navbar = () => {
                 </Button>
               </Link>
             ))}
-            {is26Enrollment && (
+            {canAccessDoubtSession && (
               <a
                 href="https://tameet.dradix.dev/"
                 target="_blank"
@@ -200,9 +200,7 @@ const Navbar = () => {
               aria-pressed={isDarkMode}
               aria-label="Toggle dark mode"
               className={`relative w-14 h-8 p-0 rounded-full transition-colors duration-300 flex items-center focus:outline-none focus:ring-offset-1 ${
-                isDarkMode
-                  ? "bg-[#262626] hover:bg-[#262626]"
-                  : "bg-zinc-100"
+                isDarkMode ? "bg-[#262626] hover:bg-[#262626]" : "bg-zinc-100"
               }`}
             >
               <span className="sr-only">Toggle dark mode</span>
@@ -295,7 +293,6 @@ const Navbar = () => {
                           isDarkMode ? "focus:bg-[#404040]" : "hover:bg-gray-50"
                         }`}
                       >
-                        
                         <span
                           className={
                             isDarkMode ? "text-gray-200" : "text-gray-700"
@@ -308,7 +305,7 @@ const Navbar = () => {
                     </Link>
                   ))}
 
-                  {is26Enrollment && (
+                  {canAccessDoubtSession && (
                     <a
                       href="https://tameet.dradix.dev/"
                       target="_blank"
@@ -344,7 +341,6 @@ const Navbar = () => {
                           isDarkMode ? "focus:bg-[#404040]" : "hover:bg-gray-50"
                         }`}
                       >
-                        
                         <span
                           className={
                             isDarkMode ? "text-white" : "text-gray-700"
@@ -361,7 +357,6 @@ const Navbar = () => {
                           isDarkMode ? "focus:bg-[#404040]" : "hover:bg-gray-50"
                         }`}
                       >
-                        
                         <span
                           className={
                             isDarkMode ? "text-white" : "text-gray-700"
@@ -385,7 +380,6 @@ const Navbar = () => {
                       isDarkMode ? "focus:bg-[#404040]" : "hover:bg-gray-50"
                     }`}
                   >
-                    
                     <span
                       className={isDarkMode ? "text-white" : "text-gray-700"}
                     >
@@ -401,7 +395,6 @@ const Navbar = () => {
                       isDarkMode ? "focus:bg-[#404040]" : "hover:bg-gray-50"
                     }`}
                   >
-                    
                     <span
                       className={isDarkMode ? "text-white" : "text-gray-700"}
                     >
@@ -417,15 +410,12 @@ const Navbar = () => {
                       isDarkMode ? "focus:bg-[#404040]" : "hover:bg-gray-50"
                     }`}
                   >
-                    
                     <span
                       className={isDarkMode ? "text-white" : "text-gray-700"}
                     >
                       Profile
                     </span>
-                    <User
-                      className='h-4 w-4 text-[#8d8d8d]'
-                    />
+                    <User className="h-4 w-4 text-[#8d8d8d]" />
                   </DropdownMenuItem>
                 </Link>
 
@@ -436,12 +426,7 @@ const Navbar = () => {
                   //@ts-expect-error: don't know what to do here
                   onSelect={(e) => handleSignOut(e)}
                 >
-                  
-                  <span
-                    className='text-red-500'
-                  >
-                    Sign out
-                  </span>
+                  <span className="text-red-500">Sign out</span>
                   <LogOut className="h-4 w-4 text-red-500" />
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -453,9 +438,7 @@ const Navbar = () => {
           variant="default"
           onClick={() => signIn()}
           className={`rounded-xl transition-all flex items-center space-x-2 ${
-            isDarkMode
-              ? "bg-[#262626] text-white"
-              : "bg-zinc-200 text-black"
+            isDarkMode ? "bg-[#262626] text-white" : "bg-zinc-200 text-black"
           }`}
         >
           <Settings className="h-4 w-4" />

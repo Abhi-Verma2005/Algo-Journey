@@ -9,13 +9,15 @@ interface StoreState {
   contest: Contest | null;
   isAdmin: boolean;
   isDarkMode: boolean;
+  enrollmentNum: string | null;
+  setEnrollmentNum: (value: string | null) => void;
   pUsernames: {
     leetcodeUsername: string;
-    codeforcesUsername: string; 
-  },
-  setDarkMode: (value: boolean) => void;  
-  setPUsernames: (v: {leetcodeUsername: string, codeforcesUsername: string}) => void;
-  setIsAdmin: (value: boolean) => void; 
+    codeforcesUsername: string;
+  };
+  setDarkMode: (value: boolean) => void;
+  setPUsernames: (v: { leetcodeUsername: string, codeforcesUsername: string }) => void;
+  setIsAdmin: (value: boolean) => void;
   addedQuestions: QuestionPar[];
   setAddedQuestions: (v: QuestionPar) => void;
   setContest: (v: Contest | null) => void;
@@ -28,8 +30,10 @@ const useStore = create<StoreState>((set) => ({
     codeforcesUsername: ''
   },
   isDarkMode: true,
+  enrollmentNum: null,
+  setEnrollmentNum: (value) => set({ enrollmentNum: value }),
   setDarkMode: (v) => set({ isDarkMode: v }),
-  setPUsernames: (v) => set({ pUsernames: v }), 
+  setPUsernames: (v) => set({ pUsernames: v }),
   isAdmin: false,
   setIsAdmin: (value) => set({ isAdmin: value }),
   addedQuestions: [],

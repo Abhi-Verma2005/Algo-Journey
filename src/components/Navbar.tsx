@@ -26,6 +26,7 @@ import {
   LucideSword,
   Brain,
   User,
+  HelpCircle,
 } from "lucide-react";
 import useTagStore from "@/store/tagsStore";
 import useStore from "@/store/store";
@@ -36,11 +37,15 @@ import { AnimatedGradientText } from "./ui/animated-gradient-text";
 const Navbar = () => {
   const router = useRouter();
   const { status } = useSession();
-  const { isAdmin, setIsAdmin, setDarkMode } = useStore();
+  const { isAdmin, setIsAdmin, setDarkMode, enrollmentNum, setEnrollmentNum } = useStore();
   const { username, setUsername } = useMessageStore();
   const { setTags } = useTagStore();
   const { setCreds } = useDemo();
   const { isDarkMode } = useStore();
+
+  const is26Enrollment = Boolean(
+    enrollmentNum && enrollmentNum.toString().trim().startsWith("26")
+  );
 
   useEffect(() => {
     const checkIfAdmin = async () => {
@@ -58,6 +63,9 @@ const Navbar = () => {
 
         setUsername(usernameResponse.data.username);
         setIsAdmin(adminResponse.data.isAdmin);
+        if (usernameResponse.data.enrollmentNum) {
+          setEnrollmentNum(usernameResponse.data.enrollmentNum);
+        }
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -66,7 +74,7 @@ const Navbar = () => {
     if (status === "authenticated") {
       checkIfAdmin();
     }
-  }, [status, setIsAdmin]);
+  }, [status, setIsAdmin, setEnrollmentNum]);
   const fn = async () => {
     const res = await axios.get("/api/getTags");
     //@ts-expect-error: not needed here.
@@ -162,6 +170,29 @@ const Navbar = () => {
                 </Button>
               </Link>
             ))}
+            {is26Enrollment && (
+              <a
+                href="https://tameet.dradix.dev/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button
+                  variant="ghost"
+                  className={`flex items-center space-x-1 ${
+                    isDarkMode ? "hover:bg-[#1c1c1c]" : "hover:bg-zinc-200"
+                  }`}
+                >
+                  <HelpCircle className="h-4 w-4 text-purple-500" />
+                  <span
+                    className={`font-medium ${
+                      isDarkMode ? "text-gray-200" : "text-gray-700"
+                    }`}
+                  >
+                    Doubt Session
+                  </span>
+                </Button>
+              </a>
+            )}
             <Button
               onClick={() => setDarkMode(!isDarkMode)}
               variant="ghost"
@@ -276,6 +307,29 @@ const Navbar = () => {
                       </DropdownMenuItem>
                     </Link>
                   ))}
+
+                  {is26Enrollment && (
+                    <a
+                      href="https://tameet.dradix.dev/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <DropdownMenuItem
+                        className={`flex justify-between cursor-pointer ${
+                          isDarkMode ? "focus:bg-[#404040]" : "hover:bg-gray-50"
+                        }`}
+                      >
+                        <span
+                          className={
+                            isDarkMode ? "text-gray-200" : "text-gray-700"
+                          }
+                        >
+                          Doubt Session
+                        </span>
+                        <HelpCircle className="h-4 w-4 text-purple-500" />
+                      </DropdownMenuItem>
+                    </a>
+                  )}
 
                   <DropdownMenuSeparator
                     className={isDarkMode ? "bg-[#3C3C3C]" : "bg-gray-100"}

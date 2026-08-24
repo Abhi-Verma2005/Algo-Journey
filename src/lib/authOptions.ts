@@ -78,7 +78,7 @@ export const authOptions: AuthOptions = {
 
 
     async session({ session }: { session: Session }) {
-    
+
 
       if (session.user) {
         const dbUser = await prisma.user.findUnique({
@@ -92,6 +92,7 @@ export const authOptions: AuthOptions = {
               ...session.user,
               id: dbUser.id,
               isComplete: dbUser.isComplete,
+              enrollmentNum: dbUser.enrollmentNum,
             },
           };
         }

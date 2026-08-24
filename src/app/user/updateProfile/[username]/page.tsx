@@ -1,18 +1,30 @@
-'use client'
-import React, { useCallback, useEffect } from 'react';
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+"use client";
+import React, { useCallback, useEffect } from "react";
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { User, Loader2 } from 'lucide-react';
+import { User, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import axios from 'axios';
-import toast from 'react-hot-toast';
-import Profile from '@/components/Profile';
-import { useParams } from 'next/navigation';
-import useStore from '@/store/store';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import axios from "axios";
+import toast from "react-hot-toast";
+import Profile from "@/components/Profile";
+import { useParams } from "next/navigation";
+import useStore from "@/store/store";
 
 type UserProfile = {
   username: string;
@@ -36,43 +48,44 @@ const ProfilePage = () => {
     section: "A1",
     enrollmentNum: "2021CS1234",
     profileUrl: "https://example.com/profile",
-    individualPoints: 150
+    individualPoints: 150,
   });
 
-  const { isDarkMode } = useStore()
+  const { isDarkMode, setEnrollmentNum } = useStore();
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
   const [showPasswordFields, setShowPasswordFields] = useState(false);
   const [ifCurrentUser, setIfCurrentUser] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const params = useParams();
 
- 
-
-  const getInitialDetails = useCallback(async() => {
+  const getInitialDetails = useCallback(async () => {
     try {
       setIsLoading(true);
-      const res = await axios.get('/api/user/getDetails');
-      
-      if(!res.data.user) return;
-      
+      const res = await axios.get("/api/user/getDetails");
+
+      if (!res.data.user) return;
+
       setProfile(res.data.user);
-      
+      if (res.data.user.enrollmentNum) {
+        setEnrollmentNum(res.data.user.enrollmentNum);
+      }
+
       if (Array.isArray(params?.username)) return;
 
-      const username = decodeURIComponent(params?.username as string || '');
+      const username = decodeURIComponent((params?.username as string) || "");
 
       if (res.data.user.username === username) {
         setIfCurrentUser(true);
       }
     } catch (error) {
       console.error("Error fetching profile:", error);
-      toast.error('Failed to load profile data');
+      toast.error("Failed to load profile data");
     } finally {
       setIsLoading(false);
     }
-  }, [params?.username]);
+  }, [params?.username, setEnrollmentNum]);
 
   useEffect(() => {
     getInitialDetails();
@@ -80,19 +93,19 @@ const ProfilePage = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setProfile(prev => ({
+    setProfile((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
-    
+
     try {
       const dataToSend = { ...profile };
-      
+
       if (profile.oldPassword && profile.newPassword) {
         dataToSend.oldPassword = profile.oldPassword;
         dataToSend.newPassword = profile.newPassword;
@@ -101,25 +114,28 @@ const ProfilePage = () => {
         delete dataToSend.newPassword;
       }
 
-      const res = await axios.patch('/api/user/updateProfile', {
-        profile: dataToSend
+      const res = await axios.patch("/api/user/updateProfile", {
+        profile: dataToSend,
       });
 
-      if(res.status === 200){
-        toast.success('Changes Saved, LogIn again!');
+      if (res.status === 200) {
+        toast.success("Changes Saved, LogIn again!");
+        if (dataToSend.enrollmentNum) {
+          setEnrollmentNum(dataToSend.enrollmentNum);
+        }
       }
       setSuccessMessage("Profile updated successfully!");
       setIsEditing(false);
       setShowPasswordFields(false);
-      
-      setProfile(prev => ({
+
+      setProfile((prev) => ({
         ...prev,
-        oldPassword: '',
-        newPassword: ''
+        oldPassword: "",
+        newPassword: "",
       }));
     } catch (error) {
       console.error("Error updating profile:", error);
-      toast.error('Some Error Occurred');
+      toast.error("Some Error Occurred");
     } finally {
       setIsSaving(false);
     }
@@ -163,7 +179,9 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'dark bg-gray-900' : 'bg-gray-50'}`}>
+    <div
+      className={`min-h-screen transition-colors duration-300 ${isDarkMode ? "dark bg-gray-900" : "bg-gray-50"}`}
+    >
       {ifCurrentUser && (
         <div className="container mx-auto py-8 max-w-2xl">
           <Card className="w-full border mt-12 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-none transition-colors duration-300">
@@ -174,7 +192,9 @@ const ProfilePage = () => {
                     <User className="w-6 h-6 text-primary" />
                   </div>
                   <div>
-                    <CardTitle className="text-gray-900 dark:text-gray-100">Profile Settings</CardTitle>
+                    <CardTitle className="text-gray-900 dark:text-gray-100">
+                      Profile Settings
+                    </CardTitle>
                     <CardDescription className="text-gray-600 dark:text-gray-400">
                       View and update your profile information
                     </CardDescription>
@@ -190,23 +210,60 @@ const ProfilePage = () => {
                   </AlertDescription>
                 </Alert>
               )}
-              
+
               {!isEditing ? (
                 <div className="space-y-6">
                   <div className="grid gap-4">
                     <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border dark:border-gray-600 transition-colors duration-300">
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Current Profile</h3>
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                        Current Profile
+                      </h3>
                       <div className="grid gap-3 text-sm">
-                        <div><span className="font-medium text-gray-700 dark:text-gray-300">Username:</span> <span className="text-gray-900 dark:text-gray-100">{profile.username}</span></div>
-                        <div><span className="font-medium text-gray-700 dark:text-gray-300">Email:</span> <span className="text-gray-900 dark:text-gray-100">{profile.email}</span></div>
-                        <div><span className="font-medium text-gray-700 dark:text-gray-300">Section:</span> <span className="text-gray-900 dark:text-gray-100">{profile.section}</span></div>
-                        <div><span className="font-medium text-gray-700 dark:text-gray-300">Enrollment:</span> <span className="text-gray-900 dark:text-gray-100">{profile.enrollmentNum}</span></div>
-                        <div><span className="font-medium text-gray-700 dark:text-gray-300">Points:</span> <span className="text-gray-900 dark:text-gray-100">{profile.individualPoints}</span></div>
+                        <div>
+                          <span className="font-medium text-gray-700 dark:text-gray-300">
+                            Username:
+                          </span>{" "}
+                          <span className="text-gray-900 dark:text-gray-100">
+                            {profile.username}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="font-medium text-gray-700 dark:text-gray-300">
+                            Email:
+                          </span>{" "}
+                          <span className="text-gray-900 dark:text-gray-100">
+                            {profile.email}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="font-medium text-gray-700 dark:text-gray-300">
+                            Section:
+                          </span>{" "}
+                          <span className="text-gray-900 dark:text-gray-100">
+                            {profile.section}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="font-medium text-gray-700 dark:text-gray-300">
+                            Enrollment:
+                          </span>{" "}
+                          <span className="text-gray-900 dark:text-gray-100">
+                            {profile.enrollmentNum}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="font-medium text-gray-700 dark:text-gray-300">
+                            Points:
+                          </span>{" "}
+                          <span className="text-gray-900 dark:text-gray-100">
+                            {profile.individualPoints}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <Button 
-                  variant={isDarkMode ? "outline" : "ghost"}
+                  <Button
+                    variant={isDarkMode ? "outline" : "ghost"}
                     onClick={() => setIsEditing(true)}
                   >
                     Edit Profile
@@ -216,7 +273,12 @@ const ProfilePage = () => {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid gap-4">
                     <div className="grid gap-2">
-                      <Label htmlFor="username" className="text-gray-700 dark:text-gray-300">Username</Label>
+                      <Label
+                        htmlFor="username"
+                        className="text-gray-700 dark:text-gray-300"
+                      >
+                        Username
+                      </Label>
                       <Input
                         id="username"
                         name="username"
@@ -228,7 +290,12 @@ const ProfilePage = () => {
                     </div>
 
                     <div className="grid gap-2">
-                      <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">Email</Label>
+                      <Label
+                        htmlFor="email"
+                        className="text-gray-700 dark:text-gray-300"
+                      >
+                        Email
+                      </Label>
                       <Input
                         id="email"
                         name="email"
@@ -241,7 +308,12 @@ const ProfilePage = () => {
                     </div>
 
                     <div className="grid gap-2">
-                      <Label htmlFor="leetcodeUsername" className="text-gray-700 dark:text-gray-300">LeetCode Username</Label>
+                      <Label
+                        htmlFor="leetcodeUsername"
+                        className="text-gray-700 dark:text-gray-300"
+                      >
+                        LeetCode Username
+                      </Label>
                       <Input
                         id="leetcodeUsername"
                         name="leetcodeUsername"
@@ -253,7 +325,12 @@ const ProfilePage = () => {
                     </div>
 
                     <div className="grid gap-2">
-                      <Label htmlFor="codeforcesUsername" className="text-gray-700 dark:text-gray-300">CodeForces Username</Label>
+                      <Label
+                        htmlFor="codeforcesUsername"
+                        className="text-gray-700 dark:text-gray-300"
+                      >
+                        CodeForces Username
+                      </Label>
                       <Input
                         id="codeforcesUsername"
                         name="codeforcesUsername"
@@ -265,26 +342,63 @@ const ProfilePage = () => {
                     </div>
 
                     <div className="grid gap-2">
-                      <Label htmlFor="section" className="text-gray-700 dark:text-gray-300">Section</Label>
-                      <Select 
+                      <Label
+                        htmlFor="section"
+                        className="text-gray-700 dark:text-gray-300"
+                      >
+                        Section
+                      </Label>
+                      <Select
                         value={profile.section}
-                        onValueChange={(value) => setProfile(prev => ({ ...prev, section: value }))}
+                        onValueChange={(value) =>
+                          setProfile((prev) => ({ ...prev, section: value }))
+                        }
                       >
                         <SelectTrigger className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300">
                           <SelectValue placeholder="Select your section" />
                         </SelectTrigger>
                         <SelectContent className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600">
-                          <SelectItem value="A" className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">A</SelectItem>
-                          <SelectItem value="B" className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">B</SelectItem>
-                          <SelectItem value="C" className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">C</SelectItem>
-                          <SelectItem value="D" className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">D</SelectItem>
-                          <SelectItem value="E" className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">E</SelectItem>
+                          <SelectItem
+                            value="A"
+                            className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          >
+                            A
+                          </SelectItem>
+                          <SelectItem
+                            value="B"
+                            className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          >
+                            B
+                          </SelectItem>
+                          <SelectItem
+                            value="C"
+                            className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          >
+                            C
+                          </SelectItem>
+                          <SelectItem
+                            value="D"
+                            className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          >
+                            D
+                          </SelectItem>
+                          <SelectItem
+                            value="E"
+                            className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          >
+                            E
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
                     <div className="grid gap-2">
-                      <Label htmlFor="enrollmentNum" className="text-gray-700 dark:text-gray-300">Enrollment Number</Label>
+                      <Label
+                        htmlFor="enrollmentNum"
+                        className="text-gray-700 dark:text-gray-300"
+                      >
+                        Enrollment Number
+                      </Label>
                       <Input
                         id="enrollmentNum"
                         name="enrollmentNum"
@@ -296,7 +410,12 @@ const ProfilePage = () => {
                     </div>
 
                     <div className="grid gap-2">
-                      <Label htmlFor="profileUrl" className="text-gray-700 dark:text-gray-300">Profile URL</Label>
+                      <Label
+                        htmlFor="profileUrl"
+                        className="text-gray-700 dark:text-gray-300"
+                      >
+                        Profile URL
+                      </Label>
                       <Input
                         id="profileUrl"
                         name="profileUrl"
@@ -308,7 +427,9 @@ const ProfilePage = () => {
                     </div>
 
                     <div className="grid gap-2">
-                      <Label className="text-gray-700 dark:text-gray-300">Individual Points</Label>
+                      <Label className="text-gray-700 dark:text-gray-300">
+                        Individual Points
+                      </Label>
                       <Input
                         value={profile.individualPoints}
                         disabled
@@ -317,19 +438,28 @@ const ProfilePage = () => {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <Button 
-                        type="button" 
+                      <Button
+                        type="button"
                         variant={isDarkMode ? "outline" : "ghost"}
-                        onClick={() => setShowPasswordFields(!showPasswordFields)}
+                        onClick={() =>
+                          setShowPasswordFields(!showPasswordFields)
+                        }
                       >
-                        {showPasswordFields ? "Hide Password Fields" : "Change Password"}
+                        {showPasswordFields
+                          ? "Hide Password Fields"
+                          : "Change Password"}
                       </Button>
                     </div>
 
                     {showPasswordFields && (
                       <>
                         <div className="grid gap-2">
-                          <Label htmlFor="oldPassword" className="text-gray-700 dark:text-gray-300">Current Password</Label>
+                          <Label
+                            htmlFor="oldPassword"
+                            className="text-gray-700 dark:text-gray-300"
+                          >
+                            Current Password
+                          </Label>
                           <Input
                             id="oldPassword"
                             name="oldPassword"
@@ -342,7 +472,12 @@ const ProfilePage = () => {
                         </div>
 
                         <div className="grid gap-2">
-                          <Label htmlFor="newPassword" className="text-gray-700 dark:text-gray-300">New Password</Label>
+                          <Label
+                            htmlFor="newPassword"
+                            className="text-gray-700 dark:text-gray-300"
+                          >
+                            New Password
+                          </Label>
                           <Input
                             id="newPassword"
                             name="newPassword"
@@ -358,25 +493,25 @@ const ProfilePage = () => {
                   </div>
 
                   <div className="flex justify-end space-x-4">
-                    <Button 
-                      type="button" 
+                    <Button
+                      type="button"
                       variant={isDarkMode ? "outline" : "ghost"}
                       onClick={() => {
                         setIsEditing(false);
                         setSuccessMessage("");
                         setShowPasswordFields(false);
-                        setProfile(prev => ({
+                        setProfile((prev) => ({
                           ...prev,
-                          oldPassword: '',
-                          newPassword: ''
+                          oldPassword: "",
+                          newPassword: "",
                         }));
                       }}
                       disabled={isSaving}
                     >
                       Cancel
                     </Button>
-                    <Button 
-                    variant={isDarkMode ? "outline" : "ghost"}
+                    <Button
+                      variant={isDarkMode ? "outline" : "ghost"}
                       type="submit"
                       disabled={isSaving}
                     >
@@ -397,7 +532,7 @@ const ProfilePage = () => {
         </div>
       )}
       <>
-        <Profile isDarkMode={isDarkMode}/>
+        <Profile isDarkMode={isDarkMode} />
       </>
     </div>
   );

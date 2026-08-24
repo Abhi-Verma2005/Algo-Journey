@@ -6,25 +6,39 @@ export async function POST() {
   try {
     const session = await getServerSession();
 
-  if (!session || !session.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  const userEmail = session?.user?.email
-
-  if(!userEmail) return 
-
-  const user = await prisma.user.findUnique({
-    where:{
-        email: userEmail
+    if (!session || !session.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-  })
+    const userEmail = session?.user?.email;
 
-  if(!user) return NextResponse.json({ error: "User not found" }, { status: 410 });
+    if (!userEmail) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
+    const user = await prisma.user.findUnique({
+      where: {
+        email: userEmail,
+      },
+      select: {
+        username: true,
+        enrollmentNum: true,
+      },
+    });
 
-  return NextResponse.json({ username: user.username }, { status: 200 });
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(
+      { username: user.username, enrollmentNum: user.enrollmentNum },
+      { status: 200 }
+    );
   } catch (error) {
-    console.log(error)
-    return NextResponse.json({ error }, { status: 200 });
+    console.error("Error in getUsername:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
+}
+
+export async function GET() {
+  return POST();
 }

@@ -5,7 +5,8 @@ declare module "next-auth" {
     user: {
       id: string;
       email: string;
-      isComplete: boolean; 
+      isComplete: boolean;
+      enrollmentNum?: string | null;
       githubAccessToken?: string | null;
     };
   }

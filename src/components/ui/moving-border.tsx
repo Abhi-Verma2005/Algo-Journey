@@ -22,14 +22,13 @@ export function ButtonX({
 }: {
   borderRadius?: string;
   children: React.ReactNode;
-  //@ts-expect-error: do not know 
+  //@ts-expect-error: do not know
   as?;
   containerClassName?: string;
   borderClassName?: string;
   duration?: number;
   className?: string;
-  //@ts-expect-error: do not know 
-  [key: string];
+  [key: string]: unknown;
 }) {
   return (
     <Component
@@ -82,13 +81,14 @@ export const MovingBorder = ({
   duration?: number;
   rx?: string;
   ry?: string;
-  //@ts-expect-error: do not know 
-  [key: string];
-}) => {//@ts-expect-error: do not know 
+  [key: string]: unknown;
+}) => {
+  //@ts-expect-error: do not know
   const pathRef = useRef();
   const progress = useMotionValue<number>(0);
 
-  useAnimationFrame((time) => {//@ts-expect-error: do not know 
+  useAnimationFrame((time) => {
+    //@ts-expect-error: do not know
     const length = pathRef.current?.getTotalLength();
     if (length) {
       const pxPerMillisecond = length / duration;
@@ -97,11 +97,11 @@ export const MovingBorder = ({
   });
 
   const x = useTransform(
-    progress,//@ts-expect-error: do not know 
+    progress, //@ts-expect-error: do not know
     (val) => pathRef.current?.getPointAtLength(val).x,
   );
   const y = useTransform(
-    progress,//@ts-expect-error: do not know 
+    progress, //@ts-expect-error: do not know
     (val) => pathRef.current?.getPointAtLength(val).y,
   );
 
@@ -123,7 +123,7 @@ export const MovingBorder = ({
           height="100%"
           rx={rx}
           ry={ry}
-          //@ts-expect-error: do not know 
+          //@ts-expect-error: do not know
           ref={pathRef}
         />
       </svg>

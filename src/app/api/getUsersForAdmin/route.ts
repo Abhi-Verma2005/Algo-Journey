@@ -13,7 +13,5 @@ export async function POST() {
   } catch (error) {
     console.error("Error fetching users:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
   }
 }

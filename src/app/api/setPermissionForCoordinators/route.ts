@@ -140,7 +140,5 @@ export async function POST(request: Request) {
       { error: 'Failed to set permissions for coordinators' },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }

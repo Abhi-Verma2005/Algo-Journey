@@ -1,17 +1,18 @@
 import prisma from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
+import { authOptions } from '@/lib/authOptions';
 
 export async function GET() {
   try {
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
 
     if (!session || !session.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
+    const user = await prisma.user.findFirst({
+      where: { email: { equals: session.user.email, mode: 'insensitive' } },
       select: {
         codeforcesApiKey: true,
         codeforcesApiSecret: true,
@@ -36,7 +37,7 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
 
     if (!session || !session.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -52,8 +53,17 @@ export async function POST(req: Request) {
       );
     }
 
-    const user = await prisma.user.update({
-      where: { email: session.user.email },
+    const user = await prisma.user.findFirst({
+      where: { email: { equals: session.user.email, mode: 'insensitive' } },
+      select: { id: true },
+    });
+
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: user.id },
       data: {
         codeforcesApiKey: apiKey || null,
         codeforcesApiSecret: apiSecret || null,
@@ -66,7 +76,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       message: apiKey ? 'API keys updated successfully' : 'API keys removed successfully',
-      hasApiKey: !!(user.codeforcesApiKey && user.codeforcesApiSecret),
+      hasApiKey: !!(updatedUser.codeforcesApiKey && updatedUser.codeforcesApiSecret),
     });
   } catch (error) {
     console.error('Error updating Codeforces API keys:', error);

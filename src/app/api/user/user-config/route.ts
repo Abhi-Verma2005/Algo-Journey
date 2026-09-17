@@ -1,28 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/authOptions'
 
-// GET: Fetch existing config only
+// GET: Fetch existing config or auto-create default if missing
 export async function GET() {
-  const session = await getServerSession()
+  const session = await getServerSession(authOptions)
 
   if (!session?.user?.email) {
-    return NextResponse.json({ error: 'Missing userEmail' }, { status: 400 })
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
   const userEmail = session.user.email
 
   try {
-    const existing = await prisma.userConfig.findUnique({
-      where: { userEmail },
+    let existing = await prisma.userConfig.findFirst({
+      where: { userEmail: { equals: userEmail, mode: 'insensitive' } },
     })
 
-    if (existing) {
-      return NextResponse.json(existing)
-    } else {
-      // Config doesn't exist yet; let client decide whether to create via POST
-      return NextResponse.json({ message: 'Config not found' }, { status: 200 })
+    if (!existing) {
+      // Auto-initialize config so user is properly synced
+      existing = await prisma.userConfig.create({
+        data: {
+          userEmail,
+          leetcode_questions_solved: 0,
+          codeforces_questions_solved: 0,
+          rank: 'novice_1',
+        },
+      })
     }
+
+    return NextResponse.json(existing)
   } catch (error) {
     console.error('GET /user-config error:', error)
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
@@ -34,30 +42,32 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
     const { leetcode_questions_solved, codeforces_questions_solved, rank, user_brief } = body
-    const session = await getServerSession()
+    const session = await getServerSession(authOptions)
 
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: 'Missing userEmail' }, { status: 400 })
-  }
-
-  const userEmail = session.user.email
-
-
-    if (!userEmail) {
-      return NextResponse.json({ error: 'userEmail is required' }, { status: 400 })
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const created = await prisma.userConfig.create({
-      data: {
+    const userEmail = session.user.email
+
+    const config = await prisma.userConfig.upsert({
+      where: { userEmail },
+      update: {
+        leetcode_questions_solved: leetcode_questions_solved ?? 0,
+        codeforces_questions_solved: codeforces_questions_solved ?? 0,
+        rank: rank || undefined,
+        user_brief: user_brief || undefined,
+      },
+      create: {
         userEmail,
         leetcode_questions_solved: leetcode_questions_solved ?? 0,
         codeforces_questions_solved: codeforces_questions_solved ?? 0,
-        rank,
-        user_brief,
+        rank: rank || 'novice_1',
+        user_brief: user_brief || undefined,
       },
     })
 
-    return NextResponse.json(created)
+    return NextResponse.json(config)
   } catch (error) {
     console.error('POST /user-config error:', error)
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
@@ -69,22 +79,24 @@ export async function PATCH(req: NextRequest) {
   try {
     const body = await req.json()
     const { ...updates } = body
-    const session = await getServerSession()
+    const session = await getServerSession(authOptions)
 
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: 'Missing userEmail' }, { status: 401 })
-  }
-
-  const userEmail = session.user.email
-
-
-    if (!userEmail) {
-      return NextResponse.json({ error: 'userEmail is required' }, { status: 400 })
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const updated = await prisma.userConfig.update({
+    const userEmail = session.user.email
+
+    const updated = await prisma.userConfig.upsert({
       where: { userEmail },
-      data: updates,
+      update: updates,
+      create: {
+        userEmail,
+        leetcode_questions_solved: updates.leetcode_questions_solved ?? 0,
+        codeforces_questions_solved: updates.codeforces_questions_solved ?? 0,
+        rank: updates.rank || 'novice_1',
+        user_brief: updates.user_brief,
+      },
     })
 
     return NextResponse.json(updated)

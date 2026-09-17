@@ -242,23 +242,23 @@ export default function Dashboard() {
       ]);
 
       const responseTotal = await fetchLatestSubmissionsLeetCode(
-        usernameRes.data.leetcodeUsername
+        usernameRes.data.leetcodeUsername,
       );
 
       const leetcodeData = {
-        totalSolved: leetData?.totalSolved,
-        totalQuestions: responseTotal?.allQuestionsCount[0]?.count,
-        easySolved: leetData?.easySolved,
-        totalEasy: responseTotal?.allQuestionsCount[1]?.count,
-        mediumSolved: leetData?.mediumSolved,
-        leetcodeUsername: leetData?.leetcodeUsername,
-        totalMedium: responseTotal?.allQuestionsCount[2].count,
-        hardSolved: leetData?.hardSolved,
-        totalHard: responseTotal?.allQuestionsCount[3]?.count,
-        ranking: responseTotal?.matchedUser?.profile.ranking,
+        totalSolved: leetData?.totalSolved ?? 0,
+        totalQuestions: responseTotal?.allQuestionsCount?.[0]?.count ?? 0,
+        easySolved: leetData?.easySolved ?? 0,
+        totalEasy: responseTotal?.allQuestionsCount?.[1]?.count ?? 0,
+        mediumSolved: leetData?.mediumSolved ?? 0,
+        leetcodeUsername:
+          leetData?.leetcodeUsername || usernameRes.data.leetcodeUsername,
+        totalMedium: responseTotal?.allQuestionsCount?.[2]?.count ?? 0,
+        hardSolved: leetData?.hardSolved ?? 0,
+        totalHard: responseTotal?.allQuestionsCount?.[3]?.count ?? 0,
+        ranking: responseTotal?.matchedUser?.profile?.ranking ?? 0,
       };
       return {
-        //@ts-expect-error: dont know what to do here
         leetcodeData: leetcodeData || null,
         codeforcesData: codeforcesData || null,
       };
@@ -287,7 +287,7 @@ export default function Dashboard() {
       fetchPlatformData().catch((error) => {
         if (error.message === "Usernames not set") {
           toast.error(
-            "Please set your leetcode and codeforces usernames in settings"
+            "Please set your leetcode and codeforces usernames in settings",
           );
         }
         throw error;
@@ -382,9 +382,7 @@ export default function Dashboard() {
             {loadingContest ? (
               <div
                 className={`${
-                  isDarkMode
-                    ? "bg-[#262626] "
-                    : "bg-zinc-100"
+                  isDarkMode ? "bg-[#262626] " : "bg-zinc-100"
                 } border-0 rounded-lg p-4 animate-pulse`}
               >
                 <div className="flex items-center gap-2 mb-2">
@@ -448,9 +446,7 @@ export default function Dashboard() {
             {loadingContest ? (
               <div
                 className={`${
-                  isDarkMode
-                    ? "bg-[#262626] "
-                    : "bg-zinc-100"
+                  isDarkMode ? "bg-[#262626] " : "bg-zinc-100"
                 } border-0 rounded-lg p-4 animate-pulse`}
               >
                 <div className="flex items-center gap-2 mb-2">
@@ -514,9 +510,7 @@ export default function Dashboard() {
             {loadingContest ? (
               <div
                 className={`${
-                  isDarkMode
-                    ? "bg-[#262626] "
-                    : "bg-zinc-100"
+                  isDarkMode ? "bg-[#262626] " : "bg-zinc-100"
                 } border-0 rounded-lg p-4 animate-pulse`}
               >
                 <div className="flex items-center gap-2 mb-2">
@@ -582,9 +576,7 @@ export default function Dashboard() {
             {loadingContest ? (
               <div
                 className={`${
-                  isDarkMode
-                    ? "bg-[#262626] "
-                    : "bg-zinc-100"
+                  isDarkMode ? "bg-[#262626] " : "bg-zinc-100"
                 } border-0 rounded-lg p-4 animate-pulse`}
               >
                 <div className="flex items-center gap-2 mb-2">
@@ -652,9 +644,7 @@ export default function Dashboard() {
             {loadingPlatformData ? (
               <div
                 className={`${
-                  isDarkMode
-                    ? "bg-[#262626]"
-                    : "bg-zinc-100"
+                  isDarkMode ? "bg-[#262626]" : "bg-zinc-100"
                 } border-0 rounded-lg p-6 animate-pulse`}
               >
                 <div className="flex items-center justify-between mb-4">
@@ -756,7 +746,9 @@ export default function Dashboard() {
                         isDarkMode ? "text-zinc-200" : "text-zinc-800"
                       } flex items-center gap-2`}
                     >
-                      <Code className={`h-5 w-5 ${isDarkMode ? "text-white" : "text-black"}`} />
+                      <Code
+                        className={`h-5 w-5 ${isDarkMode ? "text-white" : "text-black"}`}
+                      />
                       LeetCode Progress
                     </CardTitle>
                     <ExternalLink
@@ -849,7 +841,7 @@ export default function Dashboard() {
                               style={{
                                 width: `${getLeetCodeDifficultyPercentage(
                                   platformData?.leetcodeData?.easySolved,
-                                  platformData?.leetcodeData?.totalEasy
+                                  platformData?.leetcodeData?.totalEasy,
                                 )}%`,
                               }}
                             ></div>
@@ -893,7 +885,7 @@ export default function Dashboard() {
                               style={{
                                 width: `${getLeetCodeDifficultyPercentage(
                                   platformData?.leetcodeData?.mediumSolved,
-                                  platformData?.leetcodeData?.totalMedium
+                                  platformData?.leetcodeData?.totalMedium,
                                 )}%`,
                               }}
                             ></div>
@@ -937,7 +929,7 @@ export default function Dashboard() {
                               style={{
                                 width: `${getLeetCodeDifficultyPercentage(
                                   platformData?.leetcodeData?.hardSolved,
-                                  platformData?.leetcodeData?.totalHard
+                                  platformData?.leetcodeData?.totalHard,
                                 )}%`,
                               }}
                             ></div>
@@ -986,9 +978,7 @@ export default function Dashboard() {
             {loadingPlatformData ? (
               <div
                 className={`${
-                  isDarkMode
-                    ? "bg-[#262626]"
-                    : "bg-zinc-100"
+                  isDarkMode ? "bg-[#262626]" : "bg-zinc-100"
                 } border-0 rounded-lg p-6 animate-pulse`}
               >
                 <div className="flex items-center justify-between mb-4">
@@ -1067,7 +1057,9 @@ export default function Dashboard() {
                         isDarkMode ? "text-zinc-200" : "text-zinc-800"
                       } flex items-center gap-2`}
                     >
-                      <Activity className={`h-5 w-5 ${isDarkMode ? "text-white" : "text-black"}`} />
+                      <Activity
+                        className={`h-5 w-5 ${isDarkMode ? "text-white" : "text-black"}`}
+                      />
                       Codeforces Rating
                     </CardTitle>
                     <ExternalLink
@@ -1111,10 +1103,10 @@ export default function Dashboard() {
                               (1 -
                                 Math.min(
                                   Number(
-                                    platformData?.codeforcesData?.rating || 0
+                                    platformData?.codeforcesData?.rating || 0,
                                   ) / 2000,
-                                  1
-                                ))
+                                  1,
+                                )),
                           )}
                           transform="rotate(-90 50 50)"
                         />
@@ -1147,7 +1139,7 @@ export default function Dashboard() {
                         style={{
                           width: `${Math.min(
                             (platformData?.codeforcesData?.rating || 0) / 20,
-                            100
+                            100,
                           )}%`,
                         }}
                       ></div>
@@ -1322,7 +1314,9 @@ export default function Dashboard() {
                         isDarkMode ? "text-zinc-200" : "text-zinc-800"
                       } flex items-center gap-2`}
                     >
-                      <Award className={`h-5 w-5 ${isDarkMode ? "text-zinc-200" : "text-zinc-800"}`} />
+                      <Award
+                        className={`h-5 w-5 ${isDarkMode ? "text-zinc-200" : "text-zinc-800"}`}
+                      />
                       Latest Contests
                     </CardTitle>
                     <CardDescription
@@ -1519,7 +1513,9 @@ export default function Dashboard() {
                         isDarkMode ? "text-zinc-200" : "text-zinc-800"
                       } flex items-center gap-2`}
                     >
-                      <Users className={`h-5 w-5 ${isDarkMode ? "text-zinc-200" : "text-zinc-800"}`} />
+                      <Users
+                        className={`h-5 w-5 ${isDarkMode ? "text-zinc-200" : "text-zinc-800"}`}
+                      />
                       Team: {dashboardData.userStats.groupName}
                     </CardTitle>
                     <CardDescription
@@ -1537,7 +1533,7 @@ export default function Dashboard() {
                       try {
                         setLoadingMembers(true);
                         const response = await axios.get(
-                          "/api/getGroupMembersForMember"
+                          "/api/getGroupMembersForMember",
                         );
                         if (response.status !== 200) {
                           {
@@ -1707,18 +1703,18 @@ export default function Dashboard() {
                         <TableBody>
                           {members
                             .sort(
-                              (a, b) => b.individualPoints - a.individualPoints
+                              (a, b) => b.individualPoints - a.individualPoints,
                             )
                             .map((member, index) => {
                               const totalPoints = members.reduce(
                                 (sum, member) => sum + member.individualPoints,
-                                0
+                                0,
                               );
                               const contribution =
                                 totalPoints > 0
                                   ? Math.round(
                                       (member.individualPoints / totalPoints) *
-                                        100
+                                        100,
                                     )
                                   : 0;
 
@@ -1735,7 +1731,7 @@ export default function Dashboard() {
                                       ? isDarkMode
                                         ? "bg-amber-900/30"
                                         : "bg-amber-50"
-                                      : ""
+                                      : "",
                                   )}
                                 >
                                   <TableCell className="py-3 text-center">

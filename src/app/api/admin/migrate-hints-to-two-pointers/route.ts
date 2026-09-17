@@ -108,7 +108,6 @@ export async function GET() {
         error: error
       });
     } finally {
-      await prisma.$disconnect();
       await sse.close();
     }
   };

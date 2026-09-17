@@ -1,10 +1,11 @@
 import prisma from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
+import { authOptions } from '@/lib/authOptions';
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
 
     if (!session || !session.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -16,8 +17,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Problem name is required' }, { status: 400 });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
+    const user = await prisma.user.findFirst({
+      where: {
+        email: { equals: session.user.email, mode: 'insensitive' },
+      },
       select: { id: true },
     });
 
@@ -25,6 +28,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
+    // Check if there's any accepted submission for this user and problem
     const solvedSubmission = await prisma.submission.findFirst({
       where: {
         userId: user.id,
@@ -39,7 +43,5 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error('Error checking problem solution:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
   }
 }

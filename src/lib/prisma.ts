@@ -9,11 +9,7 @@ const prisma = globalForPrisma.prisma ?? new PrismaClient({
 })
 
 if (!globalForPrisma.prisma) {
-  prisma.$connect()
-    .then(() => console.log('Database connection established'))
-    .catch((err) => console.error('Failed to connect to database:', err))
+  globalForPrisma.prisma = prisma
 }
-
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
 export default prisma

@@ -63,7 +63,5 @@ export async function POST(
       { error: 'Failed to delete question' },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }

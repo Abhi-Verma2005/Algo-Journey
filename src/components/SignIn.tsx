@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Lock, User, ArrowRight, Code, Zap, Target } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import useDemo from '@/store/demoCreds';
 
 export default function SignIn() {
@@ -219,14 +220,14 @@ export default function SignIn() {
             <div>
               <Label htmlFor="username" className="text-gray-700 text-sm font-medium mb-2 flex items-center gap-2">
                 <User className="h-4 w-4 text-indigo-500" />
-                Username
+                Username or College Email
               </Label>
               <Input
                 id="username"
                 type="text"
                 value={creds.username ? creds.username : username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="Enter your username"
+                placeholder="Enter your username or college email"
                 disabled={isLoading}
                 className="h-12 border-gray-200 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg"
                 required
@@ -285,7 +286,10 @@ export default function SignIn() {
           </Button>
           
           <p className="text-center text-sm text-gray-500 mt-8">
-            New to our platform? <span className="text-indigo-600 hover:text-indigo-500 cursor-pointer font-medium">Continue with Google</span>
+            New to our platform?{" "}
+            <Link href="/auth/signup" className="text-indigo-600 hover:text-indigo-500 cursor-pointer font-medium underline">
+              Create an account
+            </Link>
           </p>
         </div>
       </div>

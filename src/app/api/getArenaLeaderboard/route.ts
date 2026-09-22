@@ -15,13 +15,15 @@ export async function POST(req: Request) {
           difficulty: difficulties ? { in: difficulties.split(",")} : undefined, 
         },
         user: {
-          group: {
-            name: { in: teams.split(",") }, 
+          groups: {
+            some: {
+              name: { in: teams.split(",") },
+            },
           },
         },
       },
       include: {
-        user: { include: { group: true } },
+        user: { include: { groups: true } },
         question: {
             include: { questionTags: true }, 
         }, 

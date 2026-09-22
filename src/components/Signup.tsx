@@ -148,7 +148,7 @@ export default function Signup() {
   return (
     <div className="min-h-screen flex">
       {/* Left Side - Large DSA Illustration */}
-      <div className="hidden lg:flex lg:w-3/5 xl:w-2/3 relative bg-gradient-to-br from-emerald-900 via-teal-900 to-cyan-800 overflow-hidden">
+      <div className="hidden lg:flex lg:w-3/5 xl:w-2/3 relative bg-linear-to-br from-emerald-900 via-teal-900 to-cyan-800 overflow-hidden">
         {/* Animated Background Elements */}
         <div className="absolute inset-0">
           <div className="absolute top-16 left-16 w-40 h-40 bg-emerald-500/20 rounded-full blur-xl animate-pulse"></div>

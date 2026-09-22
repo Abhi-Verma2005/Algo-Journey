@@ -27,6 +27,15 @@ type UserProfileResponse = {
           email: string;
         };
       } | null;
+      groups?: Array<{
+        id: string;
+        name: string;
+        groupPoints: number;
+        coordinator: {
+          username: string;
+          email: string;
+        };
+      }>;
       submissions: Array<{
         id: string;
         score: number;
@@ -113,7 +122,7 @@ export async function GET(request: Request) {
         individualPoints: true,
         profileUrl: true,
         createdAt: true,
-        group: {
+        groups: {
           select: {
             id: true,
             name: true,
@@ -204,9 +213,9 @@ export async function GET(request: Request) {
             },
           },
         },
-        attemptedGroups: user.group ? {
+        attemptedGroups: user.groups.length > 0 ? {
           where: {
-            groupId: user.group.id,
+            groupId: { in: user.groups.map((g) => g.id) },
           },
           select: {
             score: true,
@@ -257,10 +266,11 @@ export async function GET(request: Request) {
       data: {
         user: {
           ...user,
+          group: user.groups[0] || null,
+          groups: user.groups,
         },
         contests: transformedContestHistory,
         summary: summary,
-    
       },
     };
 

@@ -68,8 +68,8 @@ const UnifiedGroupManagement = () => {
   const [activeTab, setActiveTab] = useState<"create" | "update">("create");
   const [showExistingGroups, setShowExistingGroups] = useState(false);
 
-  // Group data
   const [existingGroups, setExistingGroups] = useState<Group[]>([]);
+  const [userGroups, setUserGroups] = useState<Group[]>([]);
   const [userGroup, setUserGroup] = useState<Group | null>(null);
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
 
@@ -136,9 +136,14 @@ const UnifiedGroupManagement = () => {
         },
       });
 
-      if (response.data.userGroup) {
+      if (response.data.userGroups) {
+        setUserGroups(response.data.userGroups);
+        setUserGroup(response.data.userGroups[0] || null);
+      } else if (response.data.userGroup) {
+        setUserGroups([response.data.userGroup]);
         setUserGroup(response.data.userGroup);
       } else {
+        setUserGroups([]);
         setUserGroup(null);
       }
     } catch (err) {
@@ -156,6 +161,10 @@ const UnifiedGroupManagement = () => {
         },
       });
       setExistingGroups(response.data.groups);
+      if (response.data.userGroups) {
+        setUserGroups(response.data.userGroups);
+        setUserGroup(response.data.userGroups[0] || null);
+      }
       setShowExistingGroups(true);
     } catch (err) {
       const error = err as Error;
@@ -240,7 +249,7 @@ const UnifiedGroupManagement = () => {
 
       if (response.status === 200) {
         toast.success("Joined group successfully");
-        fetchUserGroup();
+        await Promise.all([fetchUserGroup(), fetchExistingGroups()]);
       }
     } catch (err) {
       const error = err as Error;
@@ -257,7 +266,7 @@ const UnifiedGroupManagement = () => {
 
       if (response.status === 200) {
         toast.success("Left group successfully");
-        fetchUserGroup();
+        await Promise.all([fetchUserGroup(), fetchExistingGroups()]);
       }
     } catch (err) {
       const error = err as Error;
@@ -833,92 +842,102 @@ const UnifiedGroupManagement = () => {
           </Alert>
         )}
 
-        {userGroup ? (
+        {userGroups.length > 0 ? (
           <div className="space-y-3">
             <h3
               className={`text-sm font-medium flex items-center gap-2 ${
                 isDarkMode ? "text-zinc-400" : "text-zinc-600"
               }`}
             >
-              <User className="h-4 w-4" />
-              Current Group
+              <Users className="h-4 w-4" />
+              Your Groups ({userGroups.length})
             </h3>
-            <div
-              className={`rounded-xl border-0 overflow-hidden shadow-none ${
-                isDarkMode ? "bg-[#262626]" : "bg-zinc-50"
-              }`}
-            >
-              <div
-                className={`px-4 py-3 flex justify-between items-center ${
-                  isDarkMode ? "bg-amber-900/20" : "bg-amber-50/80"
-                }`}
-              >
-                <div className="flex items-center gap-3">
+            <div className="space-y-3">
+              {userGroups.map((group) => {
+                const isGroupCoordinator =
+                  group.coordinator?.email === session?.user?.email ||
+                  group.coordinatorId === session?.user?.id;
+                return (
                   <div
-                    className={`h-10 w-10 rounded-xl flex items-center justify-center font-bold text-sm ${
-                      isDarkMode
-                        ? "bg-amber-900/40 text-amber-400"
-                        : "bg-amber-200 text-amber-800"
+                    key={group.id}
+                    className={`rounded-xl border-0 overflow-hidden shadow-none ${
+                      isDarkMode ? "bg-[#262626]" : "bg-zinc-50"
                     }`}
                   >
-                    {userGroup.name.charAt(0).toUpperCase()}
-                  </div>
-                  <div>
-                    <h3
-                      className={`font-semibold ${
-                        isDarkMode ? "text-zinc-200" : "text-zinc-800"
+                    <div
+                      className={`px-4 py-3 flex justify-between items-center ${
+                        isDarkMode ? "bg-amber-900/20" : "bg-amber-50/80"
                       }`}
                     >
-                      {userGroup.name}
-                    </h3>
-                    <p
-                      className={`text-xs ${
-                        isDarkMode ? "text-zinc-400" : "text-zinc-600"
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`h-10 w-10 rounded-xl flex items-center justify-center font-bold text-sm ${
+                            isDarkMode
+                              ? "bg-amber-900/40 text-amber-400"
+                              : "bg-amber-200 text-amber-800"
+                          }`}
+                        >
+                          {group.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <h3
+                            className={`font-semibold ${
+                              isDarkMode ? "text-zinc-200" : "text-zinc-800"
+                            }`}
+                          >
+                            {group.name}
+                          </h3>
+                          <p
+                            className={`text-xs ${
+                              isDarkMode ? "text-zinc-400" : "text-zinc-600"
+                            }`}
+                          >
+                            {group._count?.members || 0} members •{" "}
+                            {group.groupPoints || 0} points
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className={`px-4 py-3 flex flex-wrap gap-2 justify-end ${
+                        isDarkMode ? "bg-[#262626]" : "bg-white"
                       }`}
                     >
-                      {userGroup._count.members} members •{" "}
-                      {userGroup.groupPoints || 0} points
-                    </p>
+                      {isGroupCoordinator && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedGroupId(group.id);
+                            setSelectedUsers([]);
+                            setShowAddMembers(true);
+                          }}
+                          className={`border flex items-center gap-1 ${
+                            isDarkMode
+                              ? "border-[#404040] bg-indigo-900/20 text-indigo-400 hover:bg-indigo-900/30"
+                              : "border-zinc-200 bg-indigo-50 text-indigo-600 hover:bg-indigo-100"
+                          }`}
+                        >
+                          <UserPlus className="h-3.5 w-3.5" />
+                          Add Members
+                        </Button>
+                      )}
+                      <Button
+                        variant="outline"
+                        onClick={() => handleLeaveGroup(group.id)}
+                        className={`border ${
+                          isDarkMode
+                            ? "border-[#404040] bg-red-900/20 text-red-400 hover:bg-red-900/30"
+                            : "border-zinc-200 bg-red-50 text-red-600 hover:bg-red-100"
+                        }`}
+                        size="sm"
+                      >
+                        Leave Group
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div
-                className={`px-4 py-3 flex flex-wrap gap-2 justify-end ${
-                  isDarkMode ? "bg-[#262626]" : "bg-white"
-                }`}
-              >
-                {isCoordinator && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      setSelectedGroupId(userGroup.id);
-                      setSelectedUsers([]);
-                      setShowAddMembers(true);
-                    }}
-                    className={`border flex items-center gap-1 ${
-                      isDarkMode
-                        ? "border-[#404040] bg-indigo-900/20 text-indigo-400 hover:bg-indigo-900/30"
-                        : "border-zinc-200 bg-indigo-50 text-indigo-600 hover:bg-indigo-100"
-                    }`}
-                  >
-                    <UserPlus className="h-3.5 w-3.5" />
-                    Add Members
-                  </Button>
-                )}
-                <Button
-                  variant="outline"
-                  onClick={() => handleLeaveGroup(userGroup.id)}
-                  className={`border ${
-                    isDarkMode
-                      ? "border-[#404040] bg-red-900/20 text-red-400 hover:bg-red-900/30"
-                      : "border-zinc-200 bg-red-50 text-red-600 hover:bg-red-100"
-                  }`}
-                  size="sm"
-                >
-                  Leave Group
-                </Button>
-              </div>
+                );
+              })}
             </div>
           </div>
         ) : (
@@ -1052,7 +1071,31 @@ const UnifiedGroupManagement = () => {
                       isDarkMode ? "bg-[#262626]" : "bg-white"
                     }`}
                   >
-                    {!userGroup && (
+                    {userGroups.some((g) => g.id === group.id) ? (
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`text-xs px-2.5 py-1 rounded-md font-medium ${
+                            isDarkMode
+                              ? "bg-emerald-900/30 text-emerald-400 border border-emerald-800/40"
+                              : "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                          }`}
+                        >
+                          Joined
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleLeaveGroup(group.id)}
+                          className={`border ${
+                            isDarkMode
+                              ? "border-[#404040] bg-red-900/20 text-red-400 hover:bg-red-900/30"
+                              : "border-zinc-200 bg-red-50 text-red-600 hover:bg-red-100"
+                          }`}
+                        >
+                          Leave
+                        </Button>
+                      </div>
+                    ) : (
                       <Button
                         variant="outline"
                         size="sm"

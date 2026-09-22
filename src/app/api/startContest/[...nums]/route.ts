@@ -64,26 +64,36 @@ export async function POST(
             endTime: contestData.endTime.toISOString(),
         };
 
-        // Get user's group
-        const userGroup = await prisma.group.findFirst({
+        const groupsArray = await prisma.groupPermission.findMany({
             where: {
+                contestId: Number(contestNumber),
+            },
+        });
+
+        const permittedGroupIds = groupsArray.map((p) => p.groupId);
+
+        let userGroup = await prisma.group.findFirst({
+            where: {
+                id: { in: permittedGroupIds },
                 members: {
-                    some: { id: user.id }
-                }
-            }
+                    some: { id: user.id },
+                },
+            },
         });
 
         if (!userGroup) {
-            return NextResponse.json({ message: "User not part of any group" }, { status: 404 });
-        }
+            const anyUserGroup = await prisma.group.findFirst({
+                where: {
+                    members: {
+                        some: { id: user.id },
+                    },
+                },
+            });
 
-        const groupsArray = await prisma.groupPermission.findMany({
-            where:{
-                contestId: Number(contestNumber)
+            if (!anyUserGroup) {
+                return NextResponse.json({ message: "User not part of any group" }, { status: 404 });
             }
-        })
 
-        if(!(groupsArray).some((p) => p.groupId === userGroup.id)){
             return NextResponse.json({ message: "Your group not allwed for this contest" }, { status: 403 });
         }
 

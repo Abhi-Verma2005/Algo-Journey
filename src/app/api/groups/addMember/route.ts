@@ -67,26 +67,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "One or more selected users not found" }, { status: 404 });
     }
 
-    // Update group with new members using a transaction
     const updatedGroup = await prisma.$transaction(async (tx) => {
-      // Add new members to the group
       const group = await tx.group.update({
         where: { id: groupId },
         data: {
           members: {
-            connect: newUserIds.map(id => ({ id })),
+            connect: newUserIds.map((id) => ({ id })),
           },
         },
         include: {
           members: true,
           coordinator: true,
         },
-      });
-
-      // Update users' groupId
-      await tx.user.updateMany({
-        where: { id: { in: newUserIds } },
-        data: { groupId },
       });
 
       return group;

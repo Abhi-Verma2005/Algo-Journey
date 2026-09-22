@@ -19,7 +19,7 @@ export async function POST(req: Request) {
             username: true,
             email: true,
             section: true,
-            group: {
+            groups: {
               select: { name: true } 
             },
             leetcodeUsername: true,

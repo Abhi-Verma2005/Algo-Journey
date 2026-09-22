@@ -27,8 +27,7 @@ model User {
   profileUrl            String?
   codeforcesApiKey      String?
   codeforcesApiSecret   String?
-  groupId               String?
-  group                 Group?           @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  groups                Group[]          @relation("GroupMembers")
   submissions           Submission[]
   individualPoints      Int              @default(0)
   createdAt             DateTime         @default(now())
@@ -41,7 +40,6 @@ model User {
   apiKey                UserApiKey?     
   ratings               TagHintRating[]
   config                UserConfig?
-  @@index([groupId]) 
 }
 
 model TempContestQuestion {
@@ -55,7 +53,7 @@ model Group {
   name              String              @unique
   coordinator       User                @relation("GroupCoordinator", fields: [coordinatorId], references: [id], onDelete: Cascade)
   coordinatorId     String              @unique
-  members           User[]
+  members           User[]              @relation("GroupMembers")
   groupPermissions  GroupPermission[]
   contestsAttempted GroupOnContest[]
   groupPoints       Int                 @default(0)

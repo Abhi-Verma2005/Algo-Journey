@@ -107,7 +107,7 @@ export default function SignIn() {
       <Toaster position="top-center" />
       
       {/* Left Side - Large Image/Illustration */}
-      <div className="hidden lg:flex lg:w-3/5 xl:w-2/3 relative bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-800 overflow-hidden">
+      <div className="hidden lg:flex lg:w-3/5 xl:w-2/3 relative bg-linear-to-br from-indigo-900 via-purple-900 to-blue-800 overflow-hidden">
         {/* Animated Background Elements */}
         <div className="absolute inset-0">
           <div className="absolute top-20 left-20 w-32 h-32 bg-blue-500/20 rounded-full blur-xl animate-pulse"></div>

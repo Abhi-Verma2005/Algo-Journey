@@ -1,29 +1,23 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma'; // Adjust the import according to your setup
+import prisma from '@/lib/prisma';
 
 export async function POST(req: Request) {
-  const { groupId, userEmail } = await req.json(); // Extract groupId and userEmail from the request body
-
   try {
-    // Validate input
+    const { groupId, userEmail } = await req.json();
+
     if (!groupId || !userEmail) {
       return NextResponse.json({ error: 'Group ID and user email are required' }, { status: 400 });
     }
 
-    // Fetch user details
     const user = await prisma.user.findUnique({
-      where: {
-        email: userEmail,
-      },
+      where: { email: userEmail },
     });
 
     const userId = user?.id;
-
     if (!userId) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    // Check if the user is a member of the group
     const isMember = await prisma.group.findFirst({
       where: {
         id: groupId,
@@ -39,9 +33,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'You are not a member of this group' }, { status: 400 });
     }
 
-
-
-  
     await prisma.group.update({
       where: { id: groupId },
       data: {

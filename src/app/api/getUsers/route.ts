@@ -4,11 +4,9 @@ import { NextResponse } from "next/server";
 
 export async function POST() {
   try {
-    // Fetch users who are NOT coordinators
     const users = await prisma.user.findMany({
       where: {
-        coordinatedGroup: null, // Users who are NOT coordinators
-        groupId: null
+        coordinatedGroup: null,
       },
     });
 

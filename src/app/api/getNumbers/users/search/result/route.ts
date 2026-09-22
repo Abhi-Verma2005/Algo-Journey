@@ -19,7 +19,7 @@ export async function POST(req: Request) {
                 },
             },
             include: {
-                group: true, // Fetch group details
+                groups: true,
             },
         });
 
@@ -27,14 +27,13 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 
-        // Return the formatted user object
         const formattedUser = {
             id: user.id,
             username: user.username,
             email: user.email,
             section: user.section,
             group: {
-                name: user.group?.name || "No Group",
+                name: user.groups.map((g) => g.name).join(", ") || "No Group",
             },
             leetcodeUsername: user.leetcodeUsername,
             codeforcesUsername: user.codeforcesUsername,

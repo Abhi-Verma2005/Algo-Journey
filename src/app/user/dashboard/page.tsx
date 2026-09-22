@@ -1300,7 +1300,7 @@ export default function Dashboard() {
             <Card
               className={`${
                 isDarkMode ? "bg-[#262626]" : "bg-zinc-100"
-              } rounded-2xl transition-all shadow-none border-0 rounded-3xl`}
+              } rounded-2xl transition-all shadow-none border-0`}
             >
               <CardHeader
                 className={`${

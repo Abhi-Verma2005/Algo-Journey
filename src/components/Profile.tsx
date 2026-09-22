@@ -80,6 +80,7 @@ type User = {
   profileUrl?: string | null;
   createdAt: Date;
   group?: Group | null;
+  groups?: Group[];
   submissions: Submission[];
 };
 
@@ -338,22 +339,28 @@ const Profile = ({ isDarkMode = false }) => {
               </div>
             </div>
 
-            {user.group && (
+            {((user.groups && user.groups.length > 0) || user.group) && (
               <div>
-                <h3 className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-slate-200' : ''}`}>Group Information</h3>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Users className={`h-4 w-4 ${isDarkMode ? 'text-slate-400' : ''}`} />
-                    <span className={`text-sm ${isDarkMode ? 'text-slate-300' : ''}`}>{user.group.name}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Medal className={`h-4 w-4 ${isDarkMode ? 'text-slate-400' : ''}`} />
-                    <span className={`text-sm ${isDarkMode ? 'text-slate-300' : ''}`}>Group Points: {user.group.groupPoints}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <User className={`h-4 w-4 ${isDarkMode ? 'text-slate-400' : ''}`} />
-                    <span className={`text-sm ${isDarkMode ? 'text-slate-300' : ''}`}>Coordinator: {user.group.coordinator.username}</span>
-                  </div>
+                <h3 className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-slate-200' : ''}`}>
+                  {(user.groups && user.groups.length > 1) ? 'Groups Information' : 'Group Information'}
+                </h3>
+                <div className="space-y-3">
+                  {(user.groups && user.groups.length > 0 ? user.groups : user.group ? [user.group] : []).map((grp) => (
+                    <div key={grp.id} className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Users className={`h-4 w-4 ${isDarkMode ? 'text-slate-400' : ''}`} />
+                        <span className={`text-sm font-medium ${isDarkMode ? 'text-slate-300' : ''}`}>{grp.name}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Medal className={`h-4 w-4 ${isDarkMode ? 'text-slate-400' : ''}`} />
+                        <span className={`text-sm ${isDarkMode ? 'text-slate-300' : ''}`}>Group Points: {grp.groupPoints}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <User className={`h-4 w-4 ${isDarkMode ? 'text-slate-400' : ''}`} />
+                        <span className={`text-sm ${isDarkMode ? 'text-slate-300' : ''}`}>Coordinator: {grp.coordinator.username}</span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}

@@ -62,27 +62,9 @@ export async function POST(req: Request) {
           }
         }
 
-        // Replace existing members with new ones
         updateData.members = {
           set: users.map((id: string) => ({ id }))
         };
-
-        // Reset groupId for members that are no longer in the group
-        const currentMemberIds = existingGroup.members.map(member => member.id);
-        const removedMemberIds = currentMemberIds.filter(id => !users.includes(id));
-        
-        if (removedMemberIds.length > 0) {
-          await tx.user.updateMany({
-            where: { id: { in: removedMemberIds } },
-            data: { groupId: null },
-          });
-        }
-
-        // Update groupId for new members
-        await tx.user.updateMany({
-          where: { id: { in: users } },
-          data: { groupId: existingGroup.id },
-        });
 
         return await tx.group.update({
           where: { id: existingGroup.id },
@@ -123,7 +105,6 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "Coordinator not found" }, { status: 404 });
       }
 
-      // Create new group
       const group = await prisma.$transaction(async (tx) => {
         const newGroup = await tx.group.create({
           data: {
@@ -135,11 +116,6 @@ export async function POST(req: Request) {
             members: true,
             coordinator: true,
           },
-        });
-
-        await tx.user.updateMany({
-          where: { id: { in: users } },
-          data: { groupId: newGroup.id },
         });
 
         return newGroup;

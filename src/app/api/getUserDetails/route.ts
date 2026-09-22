@@ -16,7 +16,7 @@ export async function POST(req: Request){
                 individualPoints: true,
                 leetcodeUsername: true,
                 codeforcesUsername: true,
-                group: true,
+                groups: true,
                 email: true,
                 createdAt: true,
                 updatedAt: true

@@ -15,7 +15,7 @@ export async function GET() {
         const user = await prisma.user.findFirst({
             where: { email: { equals: userEmail, mode: "insensitive" } },
             include: {
-                group: {
+                groups: {
                     select:{
                         id: true,
                         name: true,
@@ -24,7 +24,6 @@ export async function GET() {
                             select:{ members: true}
                         }
                     },
-                    
                 },
                 coordinatedGroup: true
             }
@@ -92,7 +91,8 @@ export async function GET() {
                     email: user.email,
                     username: user.username,
                     individualPoints: user.individualPoints,
-                    group: user.group,
+                    group: user.groups?.[0] || null,
+                    groups: user.groups || [],
                     coordinatedGroup: user.coordinatedGroup
                 },
                 submissionCount,

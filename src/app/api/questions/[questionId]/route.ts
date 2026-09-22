@@ -133,7 +133,9 @@ export async function PUT(
                 status: 'ACCEPTED',
                 contestId: contestId as number,
                 user: {
-                  groupId: groupContest.groupId
+                  groups: {
+                    some: { id: groupContest.groupId }
+                  }
                 }
               }
             });
@@ -141,7 +143,9 @@ export async function PUT(
             const membersWhoSolved = groupUserSubmissions.length;
             const groupMembersCount = await tx.user.count({
               where: {
-                groupId: groupContest.groupId
+                groups: {
+                  some: { id: groupContest.groupId }
+                }
               }
             });
             const divisor = Math.max(4, groupMembersCount);

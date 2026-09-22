@@ -13,15 +13,14 @@ export async function POST() {
 
     const user = await prisma.user.findUnique({
       where: { email: userEmail },
-      include: { group: true }, 
+      include: { coordinatedGroup: true },
     });
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-
-    const isCoordinator = user.group?.coordinatorId === user.id;
+    const isCoordinator = Boolean(user.coordinatedGroup);
 
     return NextResponse.json({ isCoordinator }, { status: 200 });
   } catch (error) {

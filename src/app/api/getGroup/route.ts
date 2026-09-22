@@ -13,18 +13,18 @@ export async function POST() {
 
     const user = await prisma.user.findUnique({
       where: { email: userEmail },
-      include: { group: true },
+      include: { groups: true },
     });
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    if (!user.group) {
+    if (!user.groups || user.groups.length === 0) {
       return NextResponse.json({ message: "User is not part of any group" }, { status: 200 });
     }
 
-    return NextResponse.json({ group: user.group }, { status: 200 });
+    return NextResponse.json({ group: user.groups[0], groups: user.groups }, { status: 200 });
   } catch (error) {
     console.error("Error fetching group:", error);
     return NextResponse.json({ error: "Failed to fetch group" }, { status: 500 });

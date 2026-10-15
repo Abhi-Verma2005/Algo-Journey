@@ -60,7 +60,8 @@ const signupSchema = z.object({
         lower.endsWith("@oriental.ac.in") ||
         lower.endsWith("@maimt.com") ||
         lower.endsWith("@csds.rishihood.edu.in") ||
-        lower.endsWith("@svyasa-sas.edu.in")
+        lower.endsWith("@svyasa-sas.edu.in") ||
+        lower.endsWith("@smru.in")
       );
     }, "Must use your official college email"),
 
